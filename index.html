@@ -221,7 +221,21 @@
               <time title="创建时间：2025-12-11 22:11:06 / 修改时间：22:12:36" itemprop="dateCreated datePublished" datetime="2025-12-11T22:11:06+08:00">2025-12-11</time>
             </span>
 
-          <br>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/12/11/%E8%A5%BF%E6%B1%9F%E6%9C%88%C2%B7%E9%81%A3%E5%85%B4/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/12/11/%E8%A5%BF%E6%B1%9F%E6%9C%88%C2%B7%E9%81%A3%E5%85%B4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
@@ -302,7 +316,21 @@
                 </span>
             </span>
 
-          <br>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/12/11/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/12/11/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
@@ -598,6 +626,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '6kWdgLVp5Kpt10BVZPpOwpFB-MdYXbMMI',
+      appKey     : '1YK1tAYZWZnNxGEkOtF19vtD',
+      placeholder: "欢迎留言交流...",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 <!-- 彩带背景特效 (Canvas-Ribbon) -->
 <script 
     size="300" 
