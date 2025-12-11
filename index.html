@@ -338,7 +338,47 @@
   </div>
 
 
+<!-- 今日诗词容器 (侧边栏·宋体增强版) -->
+<div class="daily-poem" style="
+    margin: 15px auto;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    /* 上下虚线颜色稍微深一点，更有质感 */
+    border-top: 1px dashed #999;
+    border-bottom: 1px dashed #999;
+    
+    /* 👇 核心修改：加了 !important 强制生效，防止被主题样式覆盖 */
+    font-family: 'Songti SC', 'SimSun', '宋体', serif !important;
+    
+    /* 👇 稍微加大字号，宋体太小了不好看 */
+    font-size: 18px; 
+    font-weight: bold;
+    
+    /* 👇 颜色用深灰，不刺眼但清晰 */
+    color: #333;
+    line-height: 1.6;
+">
+    <!-- 诗词显示区域 -->
+    <div id="poem_content" style="margin-bottom: 8px;">...</div>
+    
+    <!-- 诗词出处 -->
+    <div id="poem_info" style="font-size: 13px; color: #777; font-weight: normal; font-family: 'Songti SC', 'SimSun', '宋体', serif !important;"></div>
 
+    <!-- 核心脚本 -->
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      jinrishici.load(function(result) {
+        var sentence = result.data.content;
+        var info = result.data.origin.dynasty + ' · ' + result.data.origin.author;
+        
+        // 依然保持换行
+        var formattedSentence = sentence.replace(/，/g, '，<br>');
+        document.getElementById('poem_content').innerHTML = formattedSentence;
+        document.getElementById('poem_info').innerText = info;
+      });
+    </script>
+</div>
       </div>
 
     </div>
