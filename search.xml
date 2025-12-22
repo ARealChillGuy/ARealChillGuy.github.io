@@ -17,10 +17,84 @@
     <title>物理期末复习</title>
     <url>/2025/12/18/%E5%9F%BA%E7%A1%80%E7%89%A9%E7%90%862%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="大二上期末"><a href="#大二上期末" class="headerlink" title="大二上期末"></a>大二上期末</h1><h2 id="基础物理学"><a href="#基础物理学" class="headerlink" title="基础物理学"></a>基础物理学</h2><p>现在正式开始复习基物B，接下来会在这里记录我的复习进度。希望我的复习过程能给你一些感悟！</p>
-<h3 id="章节总结"><a href="#章节总结" class="headerlink" title="章节总结"></a>章节总结</h3><p>基础物理学B（2）主要研究热学，气体动理论，分子物理，振动，波动，光学，量子物理。其中这些部分都有交集，难度最大的应该是量子物理，可是根据往年题来说，占比并不大。</p>
-<h3 id="热学"><a href="#热学" class="headerlink" title="热学"></a>热学</h3><h3 id="气体动理论"><a href="#气体动理论" class="headerlink" title="气体动理论"></a>气体动理论</h3><h3 id="分子物理"><a href="#分子物理" class="headerlink" title="分子物理"></a>分子物理</h3><h3 id="振动"><a href="#振动" class="headerlink" title="振动"></a>振动</h3><h3 id="波动"><a href="#波动" class="headerlink" title="波动"></a>波动</h3><h3 id="光学"><a href="#光学" class="headerlink" title="光学"></a>光学</h3><h3 id="量子物理"><a href="#量子物理" class="headerlink" title="量子物理"></a>量子物理</h3>]]></content>
+<h2 id="章节总结"><a href="#章节总结" class="headerlink" title="章节总结"></a>章节总结</h2><p>基础物理学B（2）主要研究热学，气体动理论，分子物理，振动，波动，光学，量子物理。其中这些部分都有交集，难度最大的应该是量子物理，可是根据往年题来说，占比并不大。</p>
+<h2 id="气体动理论"><a href="#气体动理论" class="headerlink" title="气体动理论"></a>气体动理论</h2><h3 id="公式回顾"><a href="#公式回顾" class="headerlink" title="公式回顾"></a>公式回顾</h3><p>1.理想气体状态方程</p>
+<ul>
+<li><p>$PV=\frac{m}{M_{mol}}RT$</p>
+</li>
+<li><p>$P=nkT$</p>
+</li>
+<li><p>$PM_{mol}=ρRT$</p>
+</li>
+</ul>
+<p>第三个公式对于某些题目来说尤为重要，不失为一种二级结论，虽然不是课本上总结的公式，但推导起来是很容易的。</p>
+<p>2.理想气体压强公式</p>
+<ul>
+<li>$P=\frac{2}{3}n(\frac{1}{2}m\overline{v^2})$</li>
+<li>$P=\frac{2}{3}n\overline{E_k}$</li>
+</ul>
+<p>3.温度的统计意义</p>
+<ul>
+<li>$\overline{E_k}=\frac{3}{2}kT$</li>
+</ul>
+<p>4.能量均分定理</p>
+<ul>
+<li>$E_k=\frac{i}{2}kT$</li>
+</ul>
+<p>5.理想气体的内能</p>
+<ul>
+<li>$E=\frac{m}{M_mol}\frac{i}{2}RT$</li>
+</ul>
+<p>6.麦克斯韦速率分布函数</p>
+<ul>
+<li>$f(v)=4\pi(\frac{m}{2\pi kT})^\frac{3}{2}e^{-\frac{mv^2}{2kT}}v^2$</li>
+</ul>
+<p>7.三种特征速率</p>
+<p>(1) 最概然速率</p>
+<ul>
+<li>$v<em>p=\sqrt{\frac{2kT}{m}}=\sqrt{\frac{2RT}{M</em>{mol}}}$</li>
+</ul>
+<p>(2) 平均速率</p>
+<ul>
+<li>$\overline{v}=\sqrt{\frac{8kT}{\pi m}}=\sqrt{\frac{8RT}{\pi M_{mol}}}$</li>
+</ul>
+<p>(3) 方均根速率</p>
+<ul>
+<li>$\sqrt{\overline{v^2}}=\sqrt{\frac{3kT}{m}}=\sqrt{\frac{3RT}{M_{mol}}}$</li>
+</ul>
+<p>8.玻尔兹曼能量分布律</p>
+<p>(1)分子数密度按势能分布</p>
+<ul>
+<li>$n=n_0e^{-\frac{E_p}{kT}}$</li>
+</ul>
+<p>(2)分子数密度按高度分布</p>
+<ul>
+<li>$n=n_0e^{-\frac{mgz}{kT}}$</li>
+</ul>
+<p>(3)等温气压公式</p>
+<ul>
+<li>$P=P_0e^{-\frac{M}{RT}gz}$</li>
+</ul>
+<p>9.气体分子平均碰撞频率及平均自由程</p>
+<ul>
+<li>$\overline{Z}=\sqrt{2}\pi d^2\overline{v}n$</li>
+<li>$\overline{\lambda}=\frac{1}{\sqrt{2}\pi d^2n}=\frac{kT}{\sqrt{2}\pi d^2P}$</li>
+</ul>
+<p>总的来说，气体动理论就这些公式，其中值得关注的是一些符号的含义，PVT不用多说，需要注意的是n在这里均是分子数密度，即：</p>
+<ul>
+<li>$n=\frac{N}{V}$</li>
+</ul>
+<p>然后就是R，即摩尔气体常量：</p>
+<ul>
+<li>$R=8.31Jmol^{-1}K^{-1}$</li>
+</ul>
+<p>以及玻尔兹曼常量k：</p>
+<ul>
+<li>$k=1.38×10^{-23}J/K$</li>
+</ul>
+<h3 id="习题及公式应用"><a href="#习题及公式应用" class="headerlink" title="习题及公式应用"></a>习题及公式应用</h3><h2 id="热力学基础"><a href="#热力学基础" class="headerlink" title="热力学基础"></a>热力学基础</h2><h2 id="机械振动"><a href="#机械振动" class="headerlink" title="机械振动"></a>机械振动</h2><h2 id="机械波"><a href="#机械波" class="headerlink" title="机械波"></a>机械波</h2><h2 id="波动光学"><a href="#波动光学" class="headerlink" title="波动光学"></a>波动光学</h2><h2 id="近代物理基础"><a href="#近代物理基础" class="headerlink" title="近代物理基础"></a>近代物理基础</h2>]]></content>
       <tags>
-        <tag>物理，复习</tag>
+        <tag>物理</tag>
       </tags>
   </entry>
   <entry>
