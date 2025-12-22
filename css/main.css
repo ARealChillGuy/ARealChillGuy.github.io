@@ -1175,7 +1175,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #e79a25;
+  background: #acffff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2670,4 +2670,21 @@ ul.breadcrumb li + li:last-child {
   .pagination {
     margin: 8px 0 0;
   }
+}
+/* 隐藏 MathML，防止双重显示 */
+.katex-mathml {
+  display: none !important;
+}
+/* 强制左对齐并修复行高，防止根号错位 */
+.katex {
+  text-align: left !important;
+  line-height: normal !important;
+  text-indent: 0 !important;
+  white-space: nowrap !important;
+}
+/* 块级公式样式 */
+.katex-display {
+  text-align: center !important;
+  margin: 1em 0 !important;
+  overflow-x: auto;
 }
