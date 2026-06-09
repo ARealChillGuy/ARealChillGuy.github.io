@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"arealchillguy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="OS_Lab1_实验报告 前置信息 Lab1对于Lab0的跳跃对我来说有点大，因此需要利用AI掌握一些前置信息。 ELF 首先是要了解ELF，先看一段ELF代码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS_Lab1_实验报告">
+<meta property="og:url" content="http://arealchillguy.github.io/2026/06/09/OS_Lab1-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="LilYe">
+<meta property="og:description" content="OS_Lab1_实验报告 前置信息 Lab1对于Lab0的跳跃对我来说有点大，因此需要利用AI掌握一些前置信息。 ELF 首先是要了解ELF，先看一段ELF代码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-09T07:41:16.000Z">
+<meta property="article:modified_time" content="2026-06-09T07:42:36.446Z">
+<meta property="article:author" content="HQ">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://arealchillguy.github.io/2026/06/09/OS_Lab1-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS_Lab1_实验报告 | LilYe</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LilYe</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">UPUPUP</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://arealchillguy.github.io/2026/06/09/OS_Lab1-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/labixiaoxin.jpg">
+      <meta itemprop="name" content="HQ">
+      <meta itemprop="description" content="985在读cs大二">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LilYe">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS_Lab1_实验报告
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-09 15:41:16 / 修改时间：15:42:36" itemprop="dateCreated datePublished" datetime="2026-06-09T15:41:16+08:00">2026-06-09</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2026/06/09/OS_Lab1-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2026/06/09/OS_Lab1-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>OS_Lab1_实验报告</h1>
+<h2 id="前置信息">前置信息</h2>
+<p>Lab1对于Lab0的跳跃对我来说有点大，因此需要利用AI掌握一些前置信息。</p>
+<h3 id="ELF">ELF</h3>
+<p>首先是要了解ELF，先看一段ELF代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* This file defines standard ELF types, structures, and macros.</span></span><br><span class="line"><span class="comment">   Copyright (C) 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.</span></span><br><span class="line"><span class="comment">   This file is part of the GNU C Library.</span></span><br><span class="line"><span class="comment">   Contributed by Ian Lance Taylor &lt;ian@cygnus.com&gt;.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">   The GNU C Library is free software; you can redistribute it and/or</span></span><br><span class="line"><span class="comment">   modify it under the terms of the GNU Library General Public License as</span></span><br><span class="line"><span class="comment">   published by the Free Software Foundation; either version 2 of the</span></span><br><span class="line"><span class="comment">   License, or (at your option) any later version.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">   The GNU C Library is distributed in the hope that it will be useful,</span></span><br><span class="line"><span class="comment">   but WITHOUT ANY WARRANTY; without even the implied warranty of</span></span><br><span class="line"><span class="comment">   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span></span><br><span class="line"><span class="comment">   Library General Public License for more details.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">   You should have received a copy of the GNU Library General Public</span></span><br><span class="line"><span class="comment">   License along with the GNU C Library; see the file COPYING.LIB.  If not,</span></span><br><span class="line"><span class="comment">   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,</span></span><br><span class="line"><span class="comment">   Boston, MA 02111-1307, USA.  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _ELF_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _ELF_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ELF defination file from GNU C Library. We simplefied this</span></span><br><span class="line"><span class="comment"> * file for our lab, removing definations about ELF64, structs and</span></span><br><span class="line"><span class="comment"> * enums which we don&#x27;t care.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Type for a 16-bit quantity.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint16_t</span> Elf32_Half;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Types for signed and unsigned 32-bit quantities.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint32_t</span> Elf32_Word;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">int32_t</span> Elf32_Sword;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Types for signed and unsigned 64-bit quantities.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint64_t</span> Elf32_Xword;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">int64_t</span> Elf32_Sxword;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Type of addresses.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint32_t</span> Elf32_Addr;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Type of file offsets.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint32_t</span> Elf32_Off;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Type for section indices, which are 16-bit quantities.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint16_t</span> Elf32_Section;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Type of symbol indices.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">uint32_t</span> Elf32_Symndx;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Lab 1 Key Code &quot;readelf-struct-def&quot; */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* The ELF file header.  This appears at the start of every ELF file.  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> EI_NIDENT (16)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">        <span class="type">unsigned</span> <span class="type">char</span> e_ident[EI_NIDENT]; <span class="comment">/* Magic number and other info */</span></span><br><span class="line">        Elf32_Half e_type;                <span class="comment">/* Object file type */</span></span><br><span class="line">        Elf32_Half e_machine;             <span class="comment">/* Architecture */</span></span><br><span class="line">        Elf32_Word e_version;             <span class="comment">/* Object file version */</span></span><br><span class="line">        Elf32_Addr e_entry;               <span class="comment">/* Entry point virtual address */</span></span><br><span class="line">        Elf32_Off e_phoff;                <span class="comment">/* Program header table file offset */</span></span><br><span class="line">        Elf32_Off e_shoff;                <span class="comment">/* Section header table file offset */</span></span><br><span class="line">        Elf32_Word e_flags;               <span class="comment">/* Processor-specific flags */</span></span><br><span class="line">        Elf32_Half e_ehsize;              <span class="comment">/* ELF header size in bytes */</span></span><br><span class="line">        Elf32_Half e_phentsize;           <span class="comment">/* Program header table entry size */</span></span><br><span class="line">        Elf32_Half e_phnum;               <span class="comment">/* Program header table entry count */</span></span><br><span class="line">        Elf32_Half e_shentsize;           <span class="comment">/* Section header table entry size */</span></span><br><span class="line">        Elf32_Half e_shnum;               <span class="comment">/* Section header table entry count */</span></span><br><span class="line">        Elf32_Half e_shstrndx;            <span class="comment">/* Section header string table index */</span></span><br><span class="line">&#125; Elf32_Ehdr;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Fields in the e_ident array.  The EI_* macros are indices into the</span></span><br><span class="line"><span class="comment">   array.  The macros under each EI_* macro are the values the byte</span></span><br><span class="line"><span class="comment">   may have.  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> EI_MAG0 0    <span class="comment">/* File identification byte 0 index */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ELFMAG0 0x7f <span class="comment">/* Magic number byte 0 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> EI_MAG1 1   <span class="comment">/* File identification byte 1 index */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ELFMAG1 <span class="string">&#x27;E&#x27;</span> <span class="comment">/* Magic number byte 1 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> EI_MAG2 2   <span class="comment">/* File identification byte 2 index */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ELFMAG2 <span class="string">&#x27;L&#x27;</span> <span class="comment">/* Magic number byte 2 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> EI_MAG3 3   <span class="comment">/* File identification byte 3 index */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ELFMAG3 <span class="string">&#x27;F&#x27;</span> <span class="comment">/* Magic number byte 3 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Section segment header.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">        Elf32_Word sh_name;      <span class="comment">/* Section name */</span></span><br><span class="line">        Elf32_Word sh_type;      <span class="comment">/* Section type */</span></span><br><span class="line">        Elf32_Word sh_flags;     <span class="comment">/* Section flags */</span></span><br><span class="line">        Elf32_Addr sh_addr;      <span class="comment">/* Section addr */</span></span><br><span class="line">        Elf32_Off sh_offset;     <span class="comment">/* Section offset */</span></span><br><span class="line">        Elf32_Word sh_size;      <span class="comment">/* Section size */</span></span><br><span class="line">        Elf32_Word sh_link;      <span class="comment">/* Section link */</span></span><br><span class="line">        Elf32_Word sh_info;      <span class="comment">/* Section extra info */</span></span><br><span class="line">        Elf32_Word sh_addralign; <span class="comment">/* Section alignment */</span></span><br><span class="line">        Elf32_Word sh_entsize;   <span class="comment">/* Section entry size */</span></span><br><span class="line">&#125; Elf32_Shdr;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Program segment header.  */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">        Elf32_Word p_type;   <span class="comment">/* Segment type */</span></span><br><span class="line">        Elf32_Off p_offset;  <span class="comment">/* Segment file offset */</span></span><br><span class="line">        Elf32_Addr p_vaddr;  <span class="comment">/* Segment virtual address */</span></span><br><span class="line">        Elf32_Addr p_paddr;  <span class="comment">/* Segment physical address */</span></span><br><span class="line">        Elf32_Word p_filesz; <span class="comment">/* Segment size in file */</span></span><br><span class="line">        Elf32_Word p_memsz;  <span class="comment">/* Segment size in memory */</span></span><br><span class="line">        Elf32_Word p_flags;  <span class="comment">/* Segment flags */</span></span><br><span class="line">        Elf32_Word p_align;  <span class="comment">/* Segment alignment */</span></span><br><span class="line">&#125; Elf32_Phdr;</span><br><span class="line"><span class="comment">/* End of Key Code &quot;readelf-struct-def&quot; */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Legal values for p_type (segment type).  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_NULL 0            <span class="comment">/* Program header table entry unused */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_LOAD 1            <span class="comment">/* Loadable program segment */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_DYNAMIC 2         <span class="comment">/* Dynamic linking information */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_INTERP 3          <span class="comment">/* Program interpreter */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_NOTE 4            <span class="comment">/* Auxiliary information */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_SHLIB 5           <span class="comment">/* Reserved */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_PHDR 6            <span class="comment">/* Entry for header table itself */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_NUM 7             <span class="comment">/* Number of defined types.  */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_LOOS 0x60000000   <span class="comment">/* Start of OS-specific */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_HIOS 0x6fffffff   <span class="comment">/* End of OS-specific */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_LOPROC 0x70000000 <span class="comment">/* Start of processor-specific */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_HIPROC 0x7fffffff <span class="comment">/* End of processor-specific */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Legal values for p_flags (segment flags).  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PF_X (1 &lt;&lt; 0)          <span class="comment">/* Segment is executable */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PF_W (1 &lt;&lt; 1)          <span class="comment">/* Segment is writable */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PF_R (1 &lt;&lt; 2)          <span class="comment">/* Segment is readable */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PF_MASKPROC 0xf0000000 <span class="comment">/* Processor-specific */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* elf.h */</span></span></span><br></pre></td></tr></table></figure>
+<p>这是一段C语言代码，指导书的注释非常详实，这段代码主要定义了几个结构体，有Elf32_Ehdr,Elf32_Phdr,Elf32_Shdr。</p>
+<p><strong>Ehdr(ELF header):</strong></p>
+<p>e_ident:主要用来识别是不是ELF文件</p>
+<p>e_machine:目标架构，是给x86跑的还是ARM跑的</p>
+<p>e_version:ELF的版本号，通常为1</p>
+<p>e_entry:程序入口虚拟地址，<strong>操作系统把程序加载到内存后，CPU 第一条执行的指令就在这个地址（通常对应代码里的</strong>_start<strong><strong>函数，而不是</strong></strong>main）。</p>
+<p>e_phoff:程序头表偏移量  e_shoff:节头表偏移量 e_flags:特定标志位，一般为0</p>
+<p>e_ehsize:Elf32_Ehdr结构体本身的字节数 e_phentsize:程序头表中，每一个表项的大小</p>
+<p>e_phnum:程序头表里有几个表项(程序被分成了几个Segment) e_shentsize:节头表中每一个表项的大小</p>
+<p>e_shnum:节头表有几个表项(文件被分成了几个Section) e_shstrndx:节名字符串表的索引,如.text,.main存放的位置</p>
+<p><strong>Shdr(Section header):</strong></p>
+<p>sh_name:节的名称索引 sh_type:节的类型 sh_flags:节的权限标志，是否可写，是否需要在内存中分配空间</p>
+<p>sh_addr:虚拟地址，如果这个节在程序运行时需要放到内存里，这里就是它期望被加载到的内存地址。如果不加载到内存（比如调试信息），这里就是 0。</p>
+<p>sh_offset:文件内偏移量，这个节的实际数据（比如一堆机器指令）在当前文件里的起始位置。</p>
+<p>sh_size:这个节占了多少个字节 sh_link:关联节的索引 sh_info:附加信息</p>
+<p>sh_addralign:对齐方式，要求这个节在内存里的起始地址必须是某个数的整数倍</p>
+<p>sh_entsize:表项大小，如果这个节里面存的是一张表（比如符号表，里面全是固定大小的条目），这里记录每个条目有多大；如果是一般代码/数据，这里为 0。</p>
+<p><strong>Phdr(Program header):</strong></p>
+<p>p_type:段的类型，<strong>最重要的是</strong> <strong>PT_LOAD (1)</strong>，意思是这个段必须被搬进内存里。其他的还有 <strong>PT_DYNAMIC</strong>（动态链接信息）等。</p>
+<p>p_offset:文件内偏移量 p_vaddr_虚拟内存地址，操作系统应该把这个段的数据复制到内存中的哪个虚拟地址。</p>
+<p>p_paddr:物理内存地址 p_filesz:文件大小，这个段在文件里占据了多少字节 p_memsz:内存大小，这个段在内存里需要占据多少字节</p>
+<p>p_flags:段的访问权限 p_align:内存页对齐要求，<strong>规定这个段在内存中的起始地址</strong> <strong>p_vaddr</strong> <strong>和文件里的</strong> <strong>p_offset</strong> <strong>必须对齐到一个页面大小的整数倍（通常是 0x1000，即 4096 字节）。这方便操作系统利用内存页机制进行映射。</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OS/" rel="tag"># OS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/03/19/OS_Lab0-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="prev" title="OS_Lab0_实验报告">
+      <i class="fa fa-chevron-left"></i> OS_Lab0_实验报告
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="next" title="OS_Lab2_实验报告">
+      OS_Lab2_实验报告 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">OS_Lab1_实验报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">前置信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ELF"><span class="nav-number">1.1.1.</span> <span class="nav-text">ELF</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HQ"
+      src="/images/labixiaoxin.jpg">
+  <p class="site-author-name" itemprop="name">HQ</p>
+  <div class="site-description" itemprop="description">985在读cs大二</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ARealChillGuy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ARealChillGuy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:635704176@qq.com" title="E-Mail → mailto:635704176@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/529225960?spm_id_from=333.1007.0.0" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;529225960?spm_id_from&#x3D;333.1007.0.0" rel="noopener" target="_blank"><i class="fa fa-tv fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+<!-- 今日诗词容器 (侧边栏·宋体增强版) -->
+<div class="daily-poem" style="
+    margin: 15px auto;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    /* 上下虚线颜色稍微深一点，更有质感 */
+    border-top: 1px dashed #999;
+    border-bottom: 1px dashed #999;
+    
+    /* 👇 核心修改：加了 !important 强制生效，防止被主题样式覆盖 */
+    font-family: 'Songti SC', 'SimSun', '宋体', serif !important;
+    
+    /* 👇 稍微加大字号，宋体太小了不好看 */
+    font-size: 18px; 
+    font-weight: bold;
+    
+    /* 👇 颜色用深灰，不刺眼但清晰 */
+    color: #333;
+    line-height: 1.6;
+">
+    <!-- 诗词显示区域 -->
+    <div id="poem_content" style="margin-bottom: 8px;">...</div>
+    
+    <!-- 诗词出处 -->
+    <div id="poem_info" style="font-size: 13px; color: #777; font-weight: normal; font-family: 'Songti SC', 'SimSun', '宋体', serif !important;"></div>
+
+    <!-- 核心脚本 -->
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      jinrishici.load(function(result) {
+        var sentence = result.data.content;
+        var info = result.data.origin.dynasty + ' · ' + result.data.origin.author;
+        
+        // 依然保持换行
+        var formattedSentence = sentence.replace(/，/g, '，<br>');
+        document.getElementById('poem_content').innerHTML = formattedSentence;
+        document.getElementById('poem_info').innerText = info;
+      });
+    </script>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2025-12 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HQ</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">25 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '6kWdgLVp5Kpt10BVZPpOwpFB-MdYXbMMI',
+      appKey     : '1YK1tAYZWZnNxGEkOtF19vtD',
+      placeholder: "欢迎留言交流...",
+      gravatarCDN: 'https://weavatar.com/avatar/',
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://6kwdglvp.api.lncldglobal.com'
+    });
+  }, window.Valine);
+});
+</script>
+<!-- 彩带背景特效 (Canvas-Ribbon) -->
+<script 
+    size="300" 
+    alpha="0.6" 
+    zIndex="-1" 
+    src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js">
+</script>
+
+<!-- 
+    参数说明：
+    size: 彩带的宽度（默认300），想细一点可以改小。
+    alpha: 透明度（0-1），0.6 是半透明，很舒服。
+    zIndex: -1 保证它在最底层，不挡文字。
+-->
+</body>
+</html>

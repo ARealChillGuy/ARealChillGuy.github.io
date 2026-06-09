@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"arealchillguy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="OS_Lab5 实验报告 一、思考题 Thinking 5.1  问题：如果通过 kseg0 读写设备，那么对于设备的写入会缓存到 Cache 中。这是一种错误的行为，在实际编写代码的时候这么做会引发不可预知的问题。请思考：这么做这会引发什么问题？对于不同种类的设备（如我们提到的串口设备和 IDE 磁盘）的操作会有差异吗？可以从缓存的性质和缓存更新的策略来考虑。 解答： 引发的问题：kseg0 是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS_Lab5-实验报告">
+<meta property="og:url" content="http://arealchillguy.github.io/2026/06/09/OS_Lab5-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="LilYe">
+<meta property="og:description" content="OS_Lab5 实验报告 一、思考题 Thinking 5.1  问题：如果通过 kseg0 读写设备，那么对于设备的写入会缓存到 Cache 中。这是一种错误的行为，在实际编写代码的时候这么做会引发不可预知的问题。请思考：这么做这会引发什么问题？对于不同种类的设备（如我们提到的串口设备和 IDE 磁盘）的操作会有差异吗？可以从缓存的性质和缓存更新的策略来考虑。 解答： 引发的问题：kseg0 是">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-09T07:44:49.000Z">
+<meta property="article:modified_time" content="2026-06-09T07:46:19.726Z">
+<meta property="article:author" content="HQ">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://arealchillguy.github.io/2026/06/09/OS_Lab5-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS_Lab5-实验报告 | LilYe</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LilYe</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">UPUPUP</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://arealchillguy.github.io/2026/06/09/OS_Lab5-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/labixiaoxin.jpg">
+      <meta itemprop="name" content="HQ">
+      <meta itemprop="description" content="985在读cs大二">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LilYe">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS_Lab5-实验报告
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-09 15:44:49 / 修改时间：15:46:19" itemprop="dateCreated datePublished" datetime="2026-06-09T15:44:49+08:00">2026-06-09</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2026/06/09/OS_Lab5-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2026/06/09/OS_Lab5-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>OS_Lab5 实验报告</h1>
+<h2 id="一、思考题">一、思考题</h2>
+<p><strong>Thinking 5.1</strong></p>
+<ul>
+<li><strong>问题</strong>：如果通过 <code>kseg0</code> 读写设备，那么对于设备的写入会缓存到 Cache 中。这是一种错误的行为，在实际编写代码的时候这么做会引发不可预知的问题。请思考：这么做这会引发什么问题？对于不同种类的设备（如我们提到的串口设备和 IDE 磁盘）的操作会有差异吗？可以从缓存的性质和缓存更新的策略来考虑。</li>
+<li><strong>解答</strong>：</li>
+<li><strong>引发的问题</strong>：<code>kseg0</code> 是经过 Cache 缓存的内存段，而设备寄存器（MMIO）的值反映的是硬件的实时状态。如果读写经过 Cache，CPU 写入命令时可能只是修改了 Cache 行（Write-back 策略下），而没有真实写到硬件寄存器上，导致设备无法启动；同理，CPU 读取设备状态时，可能会直接读到 Cache 中的旧脏数据，而无法感知到硬件中断或就绪状态的变化。</li>
+<li><strong>设备操作的差异</strong>：</li>
+<li><strong>串口设备</strong>：流式设备。通过缓存会导致连续写入的字符被合并，或者延迟发送；读取时如果 Cache 未失效，可能导致同一个字符被读取多次或漏读用户的按键输入。</li>
+<li><strong>IDE 磁盘设备</strong>：块设备。磁盘操作需要极为严格的时序控制（如写入 LBA 寄存器、发送 <code>0x20</code> 读命令、轮询 STATUS 寄存器等待忙碌位清零等）。如果 Cache 的乱序执行或合并写发生，会直接破坏与磁盘握手的状态机，导致驱动程序死循环卡死（如 <code>wait_ide_ready</code> 无限等待）或读写到完全错误的数据块。</li>
+</ul>
+<p><strong>Thinking 5.2</strong></p>
+<ul>
+<li><strong>问题</strong>：查找代码中的相关定义，试回答一个磁盘块中最多能存储多少个文件控制块？一个目录下最多能有多少个文件？我们的文件系统支持的单个文件最大为多大？</li>
+<li><strong>解答</strong>：<br>
+通过查阅 <code>fs.h</code> 中的宏定义：</li>
+</ul>
+<ol>
+<li><strong>一个磁盘块存储的文件控制块数量</strong>：块大小 <code>BLOCK_SIZE</code> 为 4096 字节（4KB），文件控制块 <code>struct File</code> 的大小被填充限制为 <code>FILE_STRUCT_SIZE</code>（256 字节）。因此，一个块最多存储 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4096</mn><mi mathvariant="normal">/</mi><mn>256</mn><mo>=</mo><mn>16</mn></mrow><annotation encoding="application/x-tex">4096 / 256 = 16</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span><span class="mord">/</span><span class="mord">2</span><span class="mord">5</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span></span></span></span> 个文件控制块（即 <code>FILE2BLK</code> 宏的值）。</li>
+<li><strong>单个文件最大大小</strong>：在 <code>struct File</code> 中，直接指针数组 <code>f_direct</code> 的大小 <code>NDIRECT</code> 为 10，一级间接指针 <code>f_indirect</code> 指向的一个磁盘块可以存放 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4096</mn><mi mathvariant="normal">/</mi><mn>4</mn><mo>=</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">4096 / 4 = 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span><span class="mord">/</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span></span></span></span> 个指针（即 <code>NINDIRECT</code>）。因此，单个文件最大支持 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mo>+</mo><mn>1024</mn><mo>=</mo><mn>1034</mn></mrow><annotation encoding="application/x-tex">10 + 1024 = 1034</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">3</span><span class="mord">4</span></span></span></span> 个磁盘块。最大大小为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1034</mn><mo>×</mo><mn>4</mn><mtext>KB</mtext><mo>=</mo><mn>4</mn><mo separator="true">,</mo><mn>235</mn><mo separator="true">,</mo><mn>264</mn></mrow><annotation encoding="application/x-tex">1034 \times 4\text{KB} = 4,235,264</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">3</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord text"><span class="mord">KB</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mord">3</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mord">6</span><span class="mord">4</span></span></span></span> 字节（约 4.03 MB）。</li>
+<li><strong>一个目录下最多能有的文件数</strong>：目录在文件系统中也是一种文件，因此它同样受限于单个文件的最大大小（1034 个块）。由于每个块能存 16 个控制块，所以一个目录文件最多能记录 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1034</mn><mo>×</mo><mn>16</mn><mo>=</mo><mn>16</mn><mo separator="true">,</mo><mn>544</mn></mrow><annotation encoding="application/x-tex">1034 \times 16 = 16,544</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">3</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mord">4</span><span class="mord">4</span></span></span></span> 个文件。<em>(注：部分 JOS/MOS 实现中通过逻辑限制使得文件最大严格为 1024 块，此时最大文件数为 16384 个)</em>。</li>
+</ol>
+<p><strong>Thinking 5.3</strong></p>
+<ul>
+<li><strong>问题</strong>：请思考，在满足磁盘块缓存的设计的前提下，我们实验使用的内核支持的最大磁盘大小是多少？</li>
+<li><strong>解答</strong>：<br>
+我们实验使用的内核支持的最大磁盘大小为 <strong>1 GB</strong>。</li>
+<li><strong>原因分析</strong>：在 MOS 的微内核文件系统服务（<code>fs_serv</code>）中，为了实现磁盘块缓存，服务进程会将整个磁盘的内容<strong>线性地映射</strong>到自身的虚拟内存空间中。根据 <code>user/include/fs.h</code> 中的定义，磁盘映射的虚拟基地址为 <code>DISKMAP</code> (<code>0x10000000</code>)，而规定映射区的最大容量上限为 <code>DISKMAX</code> (<code>0x40000000</code>)。<br>
+因为 <code>DISKMAX</code> 的十六进制值 <code>0x40000000</code> 刚好等于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1024</mn><mo>×</mo><mn>1024</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">1024 \times 1024 \times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span></span></span></span> 字节，即 1 GB。由于内存映射的范围不能超过这个限制，因此内核所能支持的物理磁盘最大也不能超过 1 GB。</li>
+</ul>
+<p><strong>Thinking 5.4</strong></p>
+<ul>
+<li><strong>问题</strong>：在本实验中，fs/serv.h、user/include/fs.h 等文件中出现了许多宏定义，试列举你认为较为重要的宏定义，同时进行解释，并描述其主要应用之处</li>
+<li><strong>解答</strong>：</li>
+</ul>
+<ol>
+<li><strong><code>BLOCK_SIZE (4096)</code></strong>：定义了文件系统的基本物理和逻辑块大小（4KB）。应用之处：所有与文件偏移、磁盘映射、内存分配（按页对齐）相关的计算中均作为基本单位基数。</li>
+<li><strong><code>FILE_STRUCT_SIZE (256)</code></strong>：定义了单个文件控制块（FCB）的字节大小。应用之处：用于结构体占位符 <code>f_pad</code> 的计算，保证控制块按 256 字节对齐，使得一块物理块能完美容纳 16 个控制块。</li>
+<li><strong><code>DISKMAP (0x10000000)</code></strong>：文件系统服务进程将 IDE 磁盘块缓存到内存中的起始虚拟地址。应用之处：在 <code>disk_addr(blockno)</code> 函数中，用于将物理块号转换为服务进程的虚拟地址。</li>
+<li><strong><code>PTE_LIBRARY</code> (页表标志位)</strong>：MOS 专有的共享内存标志。应用之处：在 <code>fork</code> 以及文件描述符映射时，带有此标志的页不会被置为写时复制（COW），而是直接父子共享，是实现文件系统 IPC 零拷贝数据传输和文件状态共享的核心。</li>
+</ol>
+<p><strong>Thinking 5.5</strong></p>
+<ul>
+<li><strong>问题</strong>：那么 fork 前后的父子进程是否会共享文件描述符和定位指针呢？请在完成上述练习的基础上编写一个程序进行验证。</li>
+<li><strong>解答</strong>：<br>
+<strong>会共享。</strong> 因为 <code>fd</code> 所在的页面被设置了 <code>PTE_LIBRARY</code> 标志，<code>fork</code> 时不会进行写时复制，而是使得父子进程的虚拟地址映射到同一块物理内存。定位指针 <code>fd_offset</code> 存放在该页面中，因此也是共享的。<br>
+<strong>验证程序如下</strong>：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;lib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd, r;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">10</span>];</span><br><span class="line">    <span class="comment">// 假设 motd 文件内容为 &quot;0123456789&quot;</span></span><br><span class="line">    <span class="keyword">if</span> ((fd = open(<span class="string">&quot;/motd&quot;</span>, O_RDONLY)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        user_panic(<span class="string">&quot;open failed&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((r = fork()) == <span class="number">0</span>) &#123; <span class="comment">// 子进程</span></span><br><span class="line">        read(fd, buf, <span class="number">5</span>);</span><br><span class="line">        buf[<span class="number">5</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        debugf(<span class="string">&quot;Child read: %s\n&quot;</span>, buf); <span class="comment">// 应输出 &quot;01234&quot;</span></span><br><span class="line">        <span class="built_in">exit</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wait(r); <span class="comment">// 父进程等待子进程执行完毕</span></span><br><span class="line"></span><br><span class="line">    read(fd, buf, <span class="number">5</span>); <span class="comment">// 接着读</span></span><br><span class="line">    buf[<span class="number">5</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    debugf(<span class="string">&quot;Parent read: %s\n&quot;</span>, buf); <span class="comment">// 应输出 &quot;56789&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果输出为连贯的 <code>01234</code> 和 <code>56789</code>，说明子进程读取后，父进程的 <code>fd_offset</code> 也跟着后移了，证明两者完全共享描述符和指针。</p>
+<p><strong>Thinking 5.6</strong></p>
+<ul>
+<li><strong>问题</strong>：请解释 File, Fd, Filefd 结构体及其各个域的作用。比如各个结构体会在哪些过程中被使用，是否对应磁盘上的物理实体还是单纯的内存数据等。</li>
+<li><strong>解答</strong>：</li>
+<li><strong><code>struct File</code> (文件控制块)</strong>：<strong>既是物理实体也是内存数据</strong>。它存放在磁盘的目录数据块中，记录了文件的元数据（文件名 <code>f_name</code>、大小 <code>f_size</code>、类型 <code>f_type</code> 以及直接/间接磁盘块指针 <code>f_direct</code>/<code>f_indirect</code>）。服务端 <code>fs_serv</code> 在进行路径解析 (<code>walk_path</code>) 和物理块查找 (<code>file_block_walk</code>) 时重度使用它。</li>
+<li><strong><code>struct Fd</code> (通用文件描述符)</strong>：<strong>纯内存数据</strong>。存放在用户进程的 <code>FDTABLE</code> 内存区。包含设备号 <code>fd_dev_id</code>、读写光标 <code>fd_offset</code> 和打开模式 <code>fd_omode</code>。它是 VFS (虚拟文件系统) 的抽象，用户在调用通用的 <code>read/write</code> 接口时，系统通过 <code>Fd</code> 的设备 ID 分发到不同的底层驱动。</li>
+<li><strong><code>struct Filefd</code> (磁盘文件描述符)</strong>：<strong>纯内存数据</strong>。它是 <code>Fd</code> 的超集，在内存布局的头部“继承”了 <code>Fd</code>，并在其后附带了文件专属的 IPC 标识号 <code>f_fileid</code> 和服务端文件状态副本 <code>f_file</code>。当底层调用 <code>devfile_read</code> 时，会将抽象的 <code>Fd</code> 强转回 <code>Filefd</code>，提取 <code>f_fileid</code> 并通过 IPC 向 <code>fs_serv</code> 发送读盘请求。</li>
+</ul>
+<p><strong>Thinking 5.7</strong></p>
+<ul>
+<li><strong>问题</strong>：图 5.9 中有多种不同形式的箭头，请解释这些不同箭头的差别，并思考我们的操作系统是如何实现对应类型的进程间通信的。</li>
+<li><strong>解答</strong>：<br>
+在微内核文件系统的架构图（图5.9）中，主要有三种不同含义的交互箭头：</li>
+</ul>
+<ol>
+<li><strong>普通系统调用箭头（User -&gt; Kernel）</strong>：代表用户进程向内核陷入。OS 通过软中断（SYSCALL 汇编指令）触发异常，进入内核的 <code>handle_sys</code> 恢复现场并分发执行（如 <code>sys_yield</code>, <code>sys_mem_alloc</code> 等）。</li>
+<li><strong>进程间通信箭头（User Process &lt;-&gt; FS Server）</strong>：代表独立的两个用户态进程之间的交互。OS 通过在内存中约定共享通信页（<code>fsipcbuf</code>）来实现。发送方打包请求参数，通过内核 <code>sys_ipc_try_send</code> 将物理页面共享映射到接收方的虚拟地址空间，并传递 <code>FSREQ_*</code> 类型码；接收方通过 <code>sys_ipc_recv</code> 阻塞接收，处理完成后同样通过 IPC 共享页发回数据或状态码。</li>
+<li><strong>硬件设备 I/O 箭头（FS Server &lt;-&gt; IDE Disk）</strong>：代表服务端与底层硬件的物理交互。因为服务端在用户态，OS 为其提供了专门的特权系统调用 <code>sys_read_dev</code> 和 <code>sys_write_dev</code>，在此调用中，内核将虚拟地址通过直接寻址非缓存段（如 MIPS 的 <code>kseg1</code>），向真实的 IDE 寄存器（如 LBA 地址和 DATA 端口）发起 MMIO 读写指令，完成磁盘扇区的数据传输。</li>
+</ol>
+<h2 id="二、难点分析">二、难点分析</h2>
+<p>本次 Lab5 的核心是从无到有在微内核环境下构建文件系统，其逻辑跨度涵盖了硬件读写到用户态库函数的封装，包含以下三大难点：</p>
+<p>多级间接指针的磁盘块映射<br>
+这是文件系统中负责空间分配的最难逻辑。文件内容的逻辑块和磁盘物理块可能并不连续，尤其当逻辑块号超出 NDIRECT (10) 时，需要通过一级间接指针 f_indirect 去磁盘上读取存储指针的额外数据块。在实现这部分代码时，对于“查询但不分配（alloc=0）”和“遇到空洞需要分配（alloc=1）”的分支处理必须极其严谨。特别是在创建间接块本身时，需要连续调用两次分配和内存映射，且期间任何一步失败都需要抛出错误，否则会引发严重的磁盘块泄露或越权写错误。</p>
+<p>跨进程 IPC 通信及缓存同步问题 (fsipc 机制)<br>
+在 Lab5 中，普通进程并不能直接读写文件，一切读写操作都被抽象成了发送给 fs_serv 进程的 FSREQ 消息。在调试 fsipc_map 和 fsipc_dirty 等函数时，很容易因为 fsipcbuf 共享页的数据封装类型错误导致服务端解析失败。此外，普通进程写完映射到自己内存里的文件数据后，如果在关闭前忘记通过 fsipc_dirty 通知服务端标记脏页，那么当服务端执行 fs_sync 或者关闭文件时，数据将不会被持久化到 IDE 磁盘中。</p>
+<p>位图与设备控制的底层细节 (ide_read / ide_write 及 Bitmap 机制)<br>
+在最低层的硬件交互中，通过 LBA28 模式寻址 IDE 磁盘要求熟练掌握位运算，将 28 位的扇区号切割塞入四个不同的寄存器中。同时，通过位图来标记这几十万个磁盘块的分配状况时，涉及到大量的 %32 和 /32 的边界判断操作，一旦发生越界便会引起 user_panic。在这部分的编写中需要时刻留意字节、扇区（512B）和磁盘块（4KB）三者之间的尺寸转换公式。</p>
+<h2 id="三、实验体会">三、实验体会</h2>
+<p>文件描述符与抽象能力的升华<br>
+通过亲手将 struct Filefd 与 struct Fd 的头部强制对齐对文件进行表示，并在 struct Dev 中填入专门的读写函数指针，我深刻理解了 Linux/Unix 系统下“一切皆文件”的设计哲学。这一层精妙的面向对象思想不仅简化了应用层的调用接口，更是将控制台的串口数据和磁盘的永久数据通过微内核系统完美的融为一体。</p>
+<p>调试追踪能力的长足进步<br>
+文件系统的错误通常非常隐蔽。比如在写文件大小或者清空文件时少释放了一个磁盘块，可能在当时不会发生任何报错，直到系统运行了很久以后调用了 fs_check 测试或者是由于磁盘满导致挂载 Panic，才会让你追悔莫及。在此期间，通过在底层关键入口安插 debugf，以及反复跟踪 block_is_free 的断言报错点，极大锻炼了我从复杂的调用堆栈中锁定源头代码缺陷的能力。</p>
+<p>“权限隔离”与微内核的优雅<br>
+当整个 Lab 跑通，在模拟器终端敲出字符的一瞬间，最让我震撼的是：所有这些操作磁盘块的复杂逻辑，统统是运行在一个无特权的用户态进程中的。内核没有几万行的庞大文件系统驱动，只负责提供一个可以读写特殊内存地址的 sys_read_dev 接口。这让曾经在课堂上学到的“微内核鲁棒性”变得真实可触——文件系统挂了，重启一下服务进程就好，整个操作系统的核心依然安然无恙。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OS/" rel="tag"># OS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/09/OS_Lab4-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="prev" title="OS_Lab4-实验报告">
+      <i class="fa fa-chevron-left"></i> OS_Lab4-实验报告
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/09/OS_Lab6-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="next" title="OS_Lab6-实验报告">
+      OS_Lab6-实验报告 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">OS_Lab5 实验报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">一、思考题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%9A%BE%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">二、难点分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E9%AA%8C%E4%BD%93%E4%BC%9A"><span class="nav-number">1.3.</span> <span class="nav-text">三、实验体会</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HQ"
+      src="/images/labixiaoxin.jpg">
+  <p class="site-author-name" itemprop="name">HQ</p>
+  <div class="site-description" itemprop="description">985在读cs大二</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ARealChillGuy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ARealChillGuy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:635704176@qq.com" title="E-Mail → mailto:635704176@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/529225960?spm_id_from=333.1007.0.0" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;529225960?spm_id_from&#x3D;333.1007.0.0" rel="noopener" target="_blank"><i class="fa fa-tv fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+<!-- 今日诗词容器 (侧边栏·宋体增强版) -->
+<div class="daily-poem" style="
+    margin: 15px auto;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    /* 上下虚线颜色稍微深一点，更有质感 */
+    border-top: 1px dashed #999;
+    border-bottom: 1px dashed #999;
+    
+    /* 👇 核心修改：加了 !important 强制生效，防止被主题样式覆盖 */
+    font-family: 'Songti SC', 'SimSun', '宋体', serif !important;
+    
+    /* 👇 稍微加大字号，宋体太小了不好看 */
+    font-size: 18px; 
+    font-weight: bold;
+    
+    /* 👇 颜色用深灰，不刺眼但清晰 */
+    color: #333;
+    line-height: 1.6;
+">
+    <!-- 诗词显示区域 -->
+    <div id="poem_content" style="margin-bottom: 8px;">...</div>
+    
+    <!-- 诗词出处 -->
+    <div id="poem_info" style="font-size: 13px; color: #777; font-weight: normal; font-family: 'Songti SC', 'SimSun', '宋体', serif !important;"></div>
+
+    <!-- 核心脚本 -->
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      jinrishici.load(function(result) {
+        var sentence = result.data.content;
+        var info = result.data.origin.dynasty + ' · ' + result.data.origin.author;
+        
+        // 依然保持换行
+        var formattedSentence = sentence.replace(/，/g, '，<br>');
+        document.getElementById('poem_content').innerHTML = formattedSentence;
+        document.getElementById('poem_info').innerText = info;
+      });
+    </script>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2025-12 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HQ</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">25 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '6kWdgLVp5Kpt10BVZPpOwpFB-MdYXbMMI',
+      appKey     : '1YK1tAYZWZnNxGEkOtF19vtD',
+      placeholder: "欢迎留言交流...",
+      gravatarCDN: 'https://weavatar.com/avatar/',
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://6kwdglvp.api.lncldglobal.com'
+    });
+  }, window.Valine);
+});
+</script>
+<!-- 彩带背景特效 (Canvas-Ribbon) -->
+<script 
+    size="300" 
+    alpha="0.6" 
+    zIndex="-1" 
+    src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js">
+</script>
+
+<!-- 
+    参数说明：
+    size: 彩带的宽度（默认300），想细一点可以改小。
+    alpha: 透明度（0-1），0.6 是半透明，很舒服。
+    zIndex: -1 保证它在最底层，不挡文字。
+-->
+</body>
+</html>

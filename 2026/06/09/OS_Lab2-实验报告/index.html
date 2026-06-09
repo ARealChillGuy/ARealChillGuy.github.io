@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"arealchillguy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="OS-Lab2-实验报告 思考题 Thinking 2.1 1.虚拟地址 2.虚拟地址 Thinking 2.2 一. 用宏实现提高了数据结构的多态性，通常如果我们不用宏，就需要定义一个包含 void *data 的通用链表节点，然后在存取数据时进行繁琐且不安全的强制类型转换；或者为 Student、Process、File 每种不同的数据类型都手写一遍对应的链表增删改查函数。 宏在预处理阶段直接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS_Lab2_实验报告">
+<meta property="og:url" content="http://arealchillguy.github.io/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="LilYe">
+<meta property="og:description" content="OS-Lab2-实验报告 思考题 Thinking 2.1 1.虚拟地址 2.虚拟地址 Thinking 2.2 一. 用宏实现提高了数据结构的多态性，通常如果我们不用宏，就需要定义一个包含 void *data 的通用链表节点，然后在存取数据时进行繁琐且不安全的强制类型转换；或者为 Student、Process、File 每种不同的数据类型都手写一遍对应的链表增删改查函数。 宏在预处理阶段直接">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-09T07:41:26.000Z">
+<meta property="article:modified_time" content="2026-06-09T07:43:59.096Z">
+<meta property="article:author" content="HQ">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://arealchillguy.github.io/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS_Lab2_实验报告 | LilYe</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LilYe</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">UPUPUP</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://arealchillguy.github.io/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/labixiaoxin.jpg">
+      <meta itemprop="name" content="HQ">
+      <meta itemprop="description" content="985在读cs大二">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LilYe">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS_Lab2_实验报告
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-09 15:41:26 / 修改时间：15:43:59" itemprop="dateCreated datePublished" datetime="2026-06-09T15:41:26+08:00">2026-06-09</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>OS-Lab2-实验报告</h1>
+<h2 id="思考题">思考题</h2>
+<h3 id="Thinking-2-1">Thinking 2.1</h3>
+<p>1.虚拟地址 2.虚拟地址</p>
+<h3 id="Thinking-2-2">Thinking 2.2</h3>
+<h4 id="一">一.</h4>
+<p>用宏实现提高了数据结构的多态性，通常如果我们不用宏，就需要定义一个包含 <code>void *data</code> 的通用链表节点，然后在存取数据时进行繁琐且不安全的强制类型转换；或者为 <code>Student</code>、<code>Process</code>、<code>File</code> 每种不同的数据类型都手写一遍对应的链表增删改查函数。</p>
+<p>宏在预处理阶段直接展开为对应类型的指针操作（如 <code>struct type *le_next</code>）。这使得编译器可以在编译阶段严格检查指针的类型匹配。保证了严格的类型安全。</p>
+<h4 id="二">二.</h4>
+<table>
+<thead>
+<tr>
+<th>链表种类</th>
+<th>单向链表</th>
+<th>双向链表</th>
+<th>循环链表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结构特点</td>
+<td>节点只包含一个 <code>next</code> 尾随指针</td>
+<td>包含 <code>next</code> 一级指针和精妙的 <code>**le_prev</code> 二级前驱指针</td>
+<td>包含普通的一级 <code>next</code> 和 <code>prev</code> 指针，首尾相接形成一个闭环</td>
+</tr>
+<tr>
+<td>插入性能</td>
+<td>在头部插入：<strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></strong><br />在已知节点<strong>后</strong>插入：<strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></strong><br />在已知节点<strong>前</strong>插入：<strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></strong></td>
+<td>均为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+<td>均为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+<tr>
+<td>删除性能</td>
+<td><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></strong></td>
+<td><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></strong></td>
+<td><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Thinking-2-3">Thinking 2.3</h3>
+<p>C</p>
+<h3 id="Thinking-2-4">Thinking 2.4</h3>
+<h4 id="一-2">一.</h4>
+<p>在多进程操作系统中，每个进程都有自己的虚拟地址空间，如果TLB中仅仅缓存VA-&gt;PA的映射关系，会导致TLB污染和巨大的性能开销</p>
+<p>而ASID引入之后，TLB 的每一个表项不仅记录 VA 到 PA 的映射，还会打上一个“标签”。TLB 的查找逻辑变成了：<strong>只有当 CPU 发出的虚拟地址以及当前 CPU 寄存器中的 ASID 与 TLB 表项中的 VA 和 ASID 完全匹配时，才算命中。</strong></p>
+<h4 id="二-2">二.</h4>
+<p>根据 MIPS32 4Kc 官方手册的硬件规范，在 MIPS32 架构中，管理 TLB 查找和写入的关键协处理器寄存器是  <strong><code>EntryHi</code> 寄存器（CP0 Register 10, Select 0）</strong> 。在 <code>EntryHi</code> 寄存器中，包含一个专门用于存放当前进程地址空间标识符的位域，就是ASID字段，这个字段占据了 <code>EntryHi</code> 寄存器的最低8位，可以组合出<strong>256</strong>种不同的状态</p>
+<h3 id="Thinking-2-5">Thinking 2.5</h3>
+<h4 id="一-3">一.</h4>
+<p>tlb_invalidate是C语言函数，它在内部调用了由汇编语言编写的tlb_out函数</p>
+<h4 id="二-3">二.</h4>
+<p><code>tlb_invalidate</code> 的作用是：<strong>在 TLB 中查找与指定虚拟地址和进程标识符相匹配的表项，如果存在，则将其清空，以防止 CPU 使用过期的地址映射。</strong></p>
+<h4 id="三">三.</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">LEAF(tlb_out)                 # 定义一个叶子函数名为 tlb_out</span><br><span class="line">.set noreorder                # 告诉汇编器不要重排指令</span><br><span class="line">	mfc0    t0, CP0_ENTRYHI   #  将协处理器 CP0 的 EntryHi 寄存器当前的值读出，保存在通用寄存器 t0 中。</span><br><span class="line">	mtc0    a0, CP0_ENTRYHI   # 将函数参数 a0（由 tlb_invalidate 构造好的包含目标 VA 和 ASID 的值）写入 CP0_ENTRYHI 寄存器。</span><br><span class="line">	nop                       # 空指令，用于解决 CP0 寄存器写入的硬件延迟。</span><br><span class="line"></span><br><span class="line">	/* Step 1: Use &#x27;tlbp&#x27; to probe TLB entry */</span><br><span class="line">	tlbp                      # TLB Probe 探测指令。硬件会自动在 TLB 中查找与当前 CP0_ENTRYHI 匹配的项。如果找到，将索引写入 CP0_Index；找不到则将 CP0_Index 的最高位（符号位）置 1。</span><br><span class="line">	nop                       # 延迟槽，等待 tlbp 硬件查找完成。</span><br><span class="line"></span><br><span class="line">	/* Step 2: Fetch the probe result from CP0.Index */</span><br><span class="line">	mfc0    t1, CP0_INDEX     # 将探测结果从 CP0_INDEX 寄存器读出，存入通用寄存器 t1。</span><br><span class="line">.set reorder                  # 恢复汇编器的指令自动重排功能。</span><br><span class="line">	bltz    t1, NO_SUCH_ENTRY # Branch if Less Than Zero。如果 t1 &lt; 0，则跳转到 NO_SUCH_ENTRY 标签。</span><br><span class="line"></span><br><span class="line">.set noreorder                # 再次禁用指令重排，准备向 TLB 写入数据。</span><br><span class="line">	mtc0    zero, CP0_ENTRYHI # 将 CP0_ENTRYHI 寄存器清零。</span><br><span class="line">	mtc0    zero, CP0_ENTRYLO0# 将 CP0_ENTRYLO0 寄存器（偶数物理页项）清零，表示该页无效。</span><br><span class="line">	mtc0    zero, CP0_ENTRYLO1# 将 CP0_ENTRYLO1 寄存器（奇数物理页项）清零，表示该页无效。</span><br><span class="line">	nop                       # 延迟槽，等待上述写入完成。</span><br><span class="line"></span><br><span class="line">	/* Step 3: Use &#x27;tlbwi&#x27; to write CP0.EntryHi/Lo into TLB at CP0.Index  */</span><br><span class="line">	tlbwi                     # TLB Write Indexed 指令。将当前 CP0_ENTRYHI、ENTRYLO0、ENTRYLO1 的值（现在全是0）写入到 CP0_INDEX 指定的 TLB 槽位中。这实质上就完成了将该 TLB 项“清空/失效”的操作。</span><br><span class="line"></span><br><span class="line">.set reorder                  # 恢复指令重排。</span><br><span class="line"></span><br><span class="line">NO_SUCH_ENTRY:                # 标签：当 TLB 中本来就没有这个表项时，直接跳到这里。</span><br><span class="line">	mtc0    t0, CP0_ENTRYHI   #  将最开始保存在 t0 中的原 CP0_ENTRYHI 的值写回 CP0。</span><br><span class="line">	j       ra                # 跳转到返回地址，返回调用者 tlb_invalidate。</span><br><span class="line">END(tlb_out)                  # 标记函数结束。</span><br></pre></td></tr></table></figure>
+<h3 id="Thinking-2-6">Thinking 2.6</h3>
+<h4 id="一-纯硬件流程">一.纯硬件流程</h4>
+<p>当用户程序执行一条访存指令（如 <code>lw</code> 或 <code>sw</code>）时，CPU 会产生一个虚拟地址，这个阶段没有任何OS相关的函数被调用</p>
+<h4 id="二-软硬件协同流程">二.软硬件协同流程</h4>
+<p>当硬件在TLB中找不到对应的映射时，此时它会触发异常，将控制权交给操作系统，开始了内核函数调用</p>
+<p>函数调用和CPU访存之间，CPU 访存依赖 TLB 硬件实现极致的性能；而当我们编写的页表管理函数（<code>page_alloc</code>, <code>page_insert</code> 等）构成了 TLB 的坚实后盾。硬件查不到时，由软件函数去完整的两级页表中去兜底。Lab2 中的 <code>passive_alloc</code> 等函数调用 <strong>不是在进程创建时就立刻执行的</strong> 。它们是以 CPU 访存失败为契机，被<strong>被动且延迟</strong>触发的。这种设计极大地节省了物理内存。CPU 硬件访存失败 <strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span></strong> 触发异常 <strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span></strong> 执行内核内存管理函数分配物理页 <strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span></strong> 刷新 TLB <strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span></strong> CPU 重新访存成功。在这个闭环中， <strong>函数调用是连接“虚拟内存假象”与“物理内存现实”的桥梁</strong> 。</p>
+<h3 id="Thinking-2-7">Thinking 2.7</h3>
+<p>x86架构的内存管理由硬件承担了大量的工作，虚拟地址首先要经过分段机制转换为线性地址，再经过分页机制转换为最终的物理地址。x86的CPU中还有一个专门的硬件单元叫MMU，当CPU访问一个虚拟地址且TLB Miss的时候，MMU会暂停当前指令，顺着CR3寄存器去物理内存中逐级遍历页表，如果找到了，硬件会自动把表项填入 TLB 并继续执行指令，只有当硬件发现页表项无效时，才会抛出 Page Fault 异常交给 OS 处理。</p>
+<p>MIPS的设计硬件比较简单，复杂逻辑交给了软件。x86 TLB  Miss发生时，硬件 MMU 自动去查页表，操作系统在这一步完全不知情。OS 只需要在进程创建时把页表建好，把基址扔给 CR3 寄存器就行了。而MIPS在TLB Miss发生时，会抛出一个TLB Refill异常，捕获这个异常必须执行实验里写的软件中断处理函数，由 OS 自己的代码一步步查页目录、查二级页表，最后用汇编指令（如 <code>tlbwr</code>）把查到的结果手动塞进 TLB。</p>
+<p>x86因为是硬件去查页表，硬件必须知道页表长什么样。MIPS因为是软件去查页表，所以 MIPS 硬件根本不关心你在内存里的页表长什么样、是几级页表、甚至是哈希表都可以 。</p>
+<p>x86没有固定的硬件空间划分。内核态和用户态的隔离完全依赖于页表项中的权限位。MIPS硬件直接将 32 位虚拟地址空间“一刀切”硬编码划分成了几个段：<code>kuseg</code>、<code>kseg0</code> 、<code>kseg1</code> 、<code>kseg2</code>。在 <code>kseg0</code> 和 <code>kseg1</code> 中的地址， 根本不需要经过 TLB 和页表转换，直接抹去最高几位就变成了物理地址</p>
+<h2 id="难点分析">难点分析</h2>
+<p>lab2中，我觉得一共有以下三个难点：</p>
+<h3 id="难点一：queue-h-中-le-prev-二级指针">难点一：<code>queue.h</code> 中 <code>**le_prev</code> 二级指针</h3>
+<p>难点解析 ：BSD 双向链表最反直觉的地方在于，它的 <code>prev</code> 指针不是指向前一个“节点实体”，而是指向前一个节点内部的 <code>next</code>  指针本身的物理地址 。</p>
+<h3 id="难点二：两级页表寻址过程的位运算拆">难点二：两级页表寻址过程的位运算拆</h3>
+<p>难点解析 ：在 32 位架构下，如何将一个虚拟地址通过页目录和页表，最终拼凑成物理地址。尤其是在 <code>pmap.h</code> 中通过大量的宏（如 <code>PDX</code>, <code>PTX</code>, <code>PTE_ADDR</code>）进行位运算掩码提取，极易混淆。</p>
+<h3 id="难点三：MIPS-软件-TLB-重填与缺页中断">难点三：MIPS 软件 TLB 重填与缺页中断</h3>
+<p>难点解析 ：相较于 x86 由硬件 MMU 自动遍历页表，MIPS 架构采用了软件 TLB机制。这要求操作系统必须亲自接管 TLB 缺失异常，并通过代码（<code>tlb_miss_entry</code> -&gt; <code>_do_tlb_refill</code> -&gt; <code>passive_alloc</code>）进行软硬件协同，这也是实验中最复杂的控制流。</p>
+<h2 id="实验体会">实验体会</h2>
+<p>这次实验相比于lab1来说是难度飙升，exercise的数量和thinking的数量比以前也多，这次lab难点困扰了我很久，一开始没分清页表项个数和所占物理内存大小的区别，不了解二级页表的结构，感觉到非常困惑，随着实验的进行，我在网上查询资料以及翻阅os指导书以后，终于对内存分配有了更深层次的理解，这也为我以后学习os打下了一个非常牢固的基础！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OS/" rel="tag"># OS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/09/OS_Lab1-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="prev" title="OS_Lab1_实验报告">
+      <i class="fa fa-chevron-left"></i> OS_Lab1_实验报告
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/09/OS_Lab3-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="next" title="OS_Lab3-实验报告">
+      OS_Lab3-实验报告 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">OS-Lab2-实验报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">Thinking 2.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-2"><span class="nav-number">1.1.2.</span> <span class="nav-text">Thinking 2.2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">一.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">二.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-3"><span class="nav-number">1.1.3.</span> <span class="nav-text">Thinking 2.3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-4"><span class="nav-number">1.1.4.</span> <span class="nav-text">Thinking 2.4</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80-2"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">一.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C-2"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">二.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-5"><span class="nav-number">1.1.5.</span> <span class="nav-text">Thinking 2.5</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80-3"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">一.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C-3"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">二.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">三.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-6"><span class="nav-number">1.1.6.</span> <span class="nav-text">Thinking 2.6</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80-%E7%BA%AF%E7%A1%AC%E4%BB%B6%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">一.纯硬件流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C-%E8%BD%AF%E7%A1%AC%E4%BB%B6%E5%8D%8F%E5%90%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">二.软硬件协同流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinking-2-7"><span class="nav-number">1.1.7.</span> <span class="nav-text">Thinking 2.7</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">难点分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9%E4%B8%80%EF%BC%9Aqueue-h-%E4%B8%AD-le-prev-%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88"><span class="nav-number">1.2.1.</span> <span class="nav-text">难点一：queue.h 中 **le_prev 二级指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9%E4%BA%8C%EF%BC%9A%E4%B8%A4%E7%BA%A7%E9%A1%B5%E8%A1%A8%E5%AF%BB%E5%9D%80%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BD%8D%E8%BF%90%E7%AE%97%E6%8B%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">难点二：两级页表寻址过程的位运算拆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9%E4%B8%89%EF%BC%9AMIPS-%E8%BD%AF%E4%BB%B6-TLB-%E9%87%8D%E5%A1%AB%E4%B8%8E%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD"><span class="nav-number">1.2.3.</span> <span class="nav-text">难点三：MIPS 软件 TLB 重填与缺页中断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%BD%93%E4%BC%9A"><span class="nav-number">1.3.</span> <span class="nav-text">实验体会</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HQ"
+      src="/images/labixiaoxin.jpg">
+  <p class="site-author-name" itemprop="name">HQ</p>
+  <div class="site-description" itemprop="description">985在读cs大二</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ARealChillGuy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ARealChillGuy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:635704176@qq.com" title="E-Mail → mailto:635704176@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/529225960?spm_id_from=333.1007.0.0" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;529225960?spm_id_from&#x3D;333.1007.0.0" rel="noopener" target="_blank"><i class="fa fa-tv fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+<!-- 今日诗词容器 (侧边栏·宋体增强版) -->
+<div class="daily-poem" style="
+    margin: 15px auto;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    /* 上下虚线颜色稍微深一点，更有质感 */
+    border-top: 1px dashed #999;
+    border-bottom: 1px dashed #999;
+    
+    /* 👇 核心修改：加了 !important 强制生效，防止被主题样式覆盖 */
+    font-family: 'Songti SC', 'SimSun', '宋体', serif !important;
+    
+    /* 👇 稍微加大字号，宋体太小了不好看 */
+    font-size: 18px; 
+    font-weight: bold;
+    
+    /* 👇 颜色用深灰，不刺眼但清晰 */
+    color: #333;
+    line-height: 1.6;
+">
+    <!-- 诗词显示区域 -->
+    <div id="poem_content" style="margin-bottom: 8px;">...</div>
+    
+    <!-- 诗词出处 -->
+    <div id="poem_info" style="font-size: 13px; color: #777; font-weight: normal; font-family: 'Songti SC', 'SimSun', '宋体', serif !important;"></div>
+
+    <!-- 核心脚本 -->
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      jinrishici.load(function(result) {
+        var sentence = result.data.content;
+        var info = result.data.origin.dynasty + ' · ' + result.data.origin.author;
+        
+        // 依然保持换行
+        var formattedSentence = sentence.replace(/，/g, '，<br>');
+        document.getElementById('poem_content').innerHTML = formattedSentence;
+        document.getElementById('poem_info').innerText = info;
+      });
+    </script>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2025-12 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HQ</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">25 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '6kWdgLVp5Kpt10BVZPpOwpFB-MdYXbMMI',
+      appKey     : '1YK1tAYZWZnNxGEkOtF19vtD',
+      placeholder: "欢迎留言交流...",
+      gravatarCDN: 'https://weavatar.com/avatar/',
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://6kwdglvp.api.lncldglobal.com'
+    });
+  }, window.Valine);
+});
+</script>
+<!-- 彩带背景特效 (Canvas-Ribbon) -->
+<script 
+    size="300" 
+    alpha="0.6" 
+    zIndex="-1" 
+    src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js">
+</script>
+
+<!-- 
+    参数说明：
+    size: 彩带的宽度（默认300），想细一点可以改小。
+    alpha: 透明度（0-1），0.6 是半透明，很舒服。
+    zIndex: -1 保证它在最底层，不挡文字。
+-->
+</body>
+</html>

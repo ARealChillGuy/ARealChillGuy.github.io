@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"arealchillguy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="OS_Lab6_实验报告 PS: 该实验报告作为个人感悟将同步至我的个人博客网站 一. 思考题 Thinking 6.1 如果不关闭自己不会用到的管道端会怎么样？ 如果不关闭不使用的管道端，会导致对应文件描述符（fd）的引用计数无法正确清零。因为我们在判断管道一端是否关闭时，依赖的是 pageref(fd) &#x3D;&#x3D; pageref(pipe)。如果例如读者没有关闭写端，那么即使真正的写进程退出了，管">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS_Lab6-实验报告">
+<meta property="og:url" content="http://arealchillguy.github.io/2026/06/09/OS_Lab6-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:site_name" content="LilYe">
+<meta property="og:description" content="OS_Lab6_实验报告 PS: 该实验报告作为个人感悟将同步至我的个人博客网站 一. 思考题 Thinking 6.1 如果不关闭自己不会用到的管道端会怎么样？ 如果不关闭不使用的管道端，会导致对应文件描述符（fd）的引用计数无法正确清零。因为我们在判断管道一端是否关闭时，依赖的是 pageref(fd) &#x3D;&#x3D; pageref(pipe)。如果例如读者没有关闭写端，那么即使真正的写进程退出了，管">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-09T07:44:51.000Z">
+<meta property="article:modified_time" content="2026-06-09T07:46:40.788Z">
+<meta property="article:author" content="HQ">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://arealchillguy.github.io/2026/06/09/OS_Lab6-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OS_Lab6-实验报告 | LilYe</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LilYe</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">UPUPUP</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://arealchillguy.github.io/2026/06/09/OS_Lab6-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/labixiaoxin.jpg">
+      <meta itemprop="name" content="HQ">
+      <meta itemprop="description" content="985在读cs大二">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LilYe">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OS_Lab6-实验报告
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2026-06-09 15:44:51 / 修改时间：15:46:40" itemprop="dateCreated datePublished" datetime="2026-06-09T15:44:51+08:00">2026-06-09</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2026/06/09/OS_Lab6-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2026/06/09/OS_Lab6-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>OS_Lab6_实验报告</h1>
+<p><strong>PS: 该实验报告作为个人感悟将同步至我的个人博客网站</strong></p>
+<h2 id="一-思考题">一. 思考题</h2>
+<p><strong>Thinking 6.1 如果不关闭自己不会用到的管道端会怎么样？</strong><br>
+如果不关闭不使用的管道端，会导致对应文件描述符（fd）的引用计数无法正确清零。因为我们在判断管道一端是否关闭时，依赖的是 <code>pageref(fd) == pageref(pipe)</code>。如果例如读者没有关闭写端，那么即使真正的写进程退出了，管道数据结构中的写端引用计数仍不为0。这会导致读者在读取空管道时，误以为还有写者存活，从而陷入死循环的阻塞等待（<code>syscall_yield</code>）中，永远无法读到 EOF 并退出。</p>
+<p><strong>Thinking 6.2 示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？</strong><br>
+需要将父子进程中关闭端口和读写操作的逻辑对调：</p>
+<ul>
+<li><strong>父进程（读者）修改为</strong>：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">close(fildes[<span class="number">1</span>]); </span><br><span class="line">read(fildes[<span class="number">0</span>], buf, <span class="number">100</span>); </span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;parent-process read:%s&quot;</span>, buf);</span><br><span class="line">close(fildes[<span class="number">0</span>]); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>子进程（写者）修改为</strong>：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">close(fildes[<span class="number">0</span>]); </span><br><span class="line">write(fildes[<span class="number">1</span>], <span class="string">&quot;Hello world\n&quot;</span>, <span class="number">12</span>); </span><br><span class="line">close(fildes[<span class="number">1</span>]); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>Thinking 6.3 MOS 中的管道缓冲区大小 PIPE_SIZE 过小有什么影响？缓冲区大小是怎么影响吞吐和切换效率的？</strong></p>
+<ul>
+<li><strong>影响</strong>：如果 <code>PIPE_SIZE</code> 过小（如 MOS 中仅为 32 Byte），写者会非常容易将缓冲区写满进而被阻塞，读者也会频繁读空缓冲区而阻塞。</li>
+<li><strong>对吞吐和切换效率的影响</strong>：缓冲区过小会导致父子（读写）进程之间发生极其频繁的进程调度与上下文切换（Context Switch）。由于进程切换本身需要保存和恢复现场，这会带来巨大的时间开销，使得真正用于数据拷贝的 CPU 时间占比下降，最终导致整个系统的吞吐量急剧降低，切换效率低下。</li>
+</ul>
+<p><strong>Thinking 6.4 上面这个恒等式 (<code>pageref(rfd) + pageref(wfd) == pageref(pipe)</code>) 在所有时刻都成立吗？请给出你的分析过程，如果不成立，是否会造成误判？</strong></p>
+<ul>
+<li><strong>不一定在所有时刻成立</strong>。</li>
+<li><strong>分析过程</strong>：修改页面引用计数（<code>map</code>/<code>unmap</code> 操作）并不是一步完成的，而是对 <code>fd</code> 页面和 <code>pipe</code> 页面分别进行系统调用。由于在两次独立的系统调用之间可能会发生时钟中断，导致进程被调度走，因此在这两个操作的间隙，恒等式是不成立的。</li>
+<li><strong>造成误判</strong>：会。例如，在写端 <code>close</code> 过程中，如果先 <code>unmap</code> 了 <code>pipe</code>，此时 <code>pageref(pipe)</code> 减小了，但 <code>pageref(wfd)</code> 还没减。如果此时切换到读进程，读者检查到 <code>pageref(rfd) == pageref(pipe)</code> 恰好成立（实际上写端还没完全关掉），就会误判写端已关闭而提前退出。</li>
+</ul>
+<p><strong>Thinking 6.5 上面这种不同步修改 pp_ref 而导致的进程竞争问题在 user/lib/fd.c 中的 dup 函数中也存在。请结合代码模仿上述情景，分析一下我们的 dup 函数中为什么会出现预想之外的情况？</strong></p>
+<ul>
+<li><code>dup</code> 函数的作用是复制文件描述符，它需要依次 <code>map</code> 文件描述符页面（<code>fd</code>）和对应的管道数据缓冲区（<code>pipe</code>），这两个操作都会使对应的 <code>pp_ref</code> 增加1。</li>
+<li><strong>情景</strong>：假设读者进程想要 <code>dup</code> 读端。如果它先 <code>map</code> 了 <code>fd</code> 页，此时 <code>pageref(fd)</code> 增加了1，但还没来得及 <code>map</code> <code>pipe</code> 页（引用未增加），时钟中断发生，切到了原本阻塞的写者进程。写者在判断读端是否关闭时，发现 <code>pageref(wfd) == pageref(pipe)</code> 居然成立了（因为 <code>pipe</code> 还没加1，导致等式意外左右相等），写者就会误以为读端已经全部关闭，从而错误地退出了。</li>
+</ul>
+<p><strong>Thinking 6.6 为什么在我们的 MOS 中，系统调用一定是原子操作呢？如果你觉得不是所有的系统调用都是原子操作，请给出反例。</strong></p>
+<ul>
+<li>在我们的 MOS 系统中，以 <code>syscall_</code> 开头的内核态系统调用函数<strong>是原子操作</strong>。</li>
+<li><strong>原因分析</strong>：MIPS 架构在触发异常进入内核态（执行 syscall）时，硬件会自动关闭中断（通过修改 CP0 的 STATUS 寄存器禁止中断），或者在陷入内核时的汇编入口中显式屏蔽了时钟中断。这意味着在内核执行这些 <code>syscall_</code> 函数体时，是不可能被时钟中断打断并发生进程切换的，因此它们相对用户进程而言具备原子性。</li>
+<li><strong>反例澄清</strong>：对于用户态的库函数（如 <code>pipe_close</code>、<code>fork</code>、<code>dup</code>），它们内部包含了多个 <code>syscall_</code> 调用，这些用户态函数<strong>不是</strong>原子操作，可能在两次 syscall 之间被打断。</li>
+</ul>
+<p><strong>Thinking 6.7 仔细阅读上面这段话，并思考下列问题</strong></p>
+<ul>
+<li><strong>控制 <code>pipe_close</code> 中的 unmap 顺序</strong>：可以解决。我们保证在 close 时，**先 unmap <code>fd</code>，再 unmap <code>pipe**</code>。这样即使中间被打断，<code>pageref(pipe)</code> 总是大于等于 <code>pageref(fd)</code> 的，此时判断管道关闭的条件 <code>pageref(pipe) == pageref(fd)</code> 绝对不可能意外成立，从而避免了读者的误判。</li>
+<li><strong>在 <code>dup</code> 函数中的 map 顺序</strong>：同理，会出现类似问题。为了保证在打断时 <code>pageref(pipe) &gt;= pageref(fd)</code>，我们在 <code>dup</code> 增加引用计数时，应当**先 map <code>pipe</code>，然后再 map <code>fd**</code>。这样即使在中间态发生切换，<code>pipe</code> 的引用计数已经升上去了，绝不会触发误判关闭的相等条件。</li>
+</ul>
+<p><strong>Thinking 6.8 思考以下三个问题。 (关于文件系统，ELF加载与bss段)</strong><br>
+<code>elf_load_seg()</code> 和 <code>load_icode_mapper()</code> 确保了 <code>bss</code> 段正确加载。在 ELF 文件中，<code>bss</code> 段不占据实际的物理磁盘空间，其在程序头中的表现为：<code>memsz</code>（在内存中需要的空间）严格大于 <code>filesz</code>（在文件中实际存放的数据大小）。<br>
+实现机制上：我们在分配虚拟内存时，根据 <code>memsz</code> 申请足够的内存页。然后从文件中拷贝出大小为 <code>filesz</code> 的数据到内存中，对于剩余的 <code>memsz - filesz</code> 这部分空间（即 <code>bss</code> 段），使用类似 <code>bzero</code> 的操作将其全部显式清零，从而满足了未初始化全局变量初始值为0的要求。</p>
+<p><strong>Thinking 6.9 在哪步，0 和 1 被“安排”为标准输入和标准输出？</strong><br>
+通过阅读 <code>user/init.c</code>（即 <code>init.b</code> 的源码）可知：进程刚启动时，文件描述符表是空的。进程首先调用 <code>opencons()</code> 函数打开控制台，由于这是进程打开的第一个文件，系统自动分配了当前最小的空闲描述符，即 <code>fd 0</code>（标准输入）。紧接着，代码调用了 <code>dup(0, 1)</code>，将描述符 0 映射到了描述符 1 上。至此，0和1都被“安排”好了，分别对应控制台的输入和输出。</p>
+<p><strong>Thinking 6.10 在 MOS 中我们用到的 shell 命令是内置命令还是外部命令？为什么 Linux 的 cd 命令是内部命令？</strong></p>
+<ul>
+<li>在 MOS 中，我们使用的 <code>ls</code>、<code>cat</code>、<code>echo</code> 都是<strong>外部命令</strong>（因为系统会为它们在磁盘上找到对应的 <code>.b</code> 文件，并通过 <code>spawn</code> 为其创建一个全新的子进程去执行）。</li>
+<li>Linux 的 <code>cd</code> 必须是<strong>内部命令</strong>（内置命令）。因为 <code>cd</code> 的作用是改变<strong>当前进程</strong>的工作目录。如果把 <code>cd</code> 作为外部命令来 <code>fork</code> 一个子进程执行，子进程确实改变了它自己的工作目录，但在执行完毕退出后，父进程（shell 本身）的工作目录仍然是原来的样子，这完全违背了 <code>cd</code> 命令的设计初衷。</li>
+</ul>
+<p><strong>Thinking 6.11 在你的 shell 中输入命令 <code>ls.b | cat.b &gt; motd</code>。观察到几次 spawn，几次销毁？</strong></p>
+<ul>
+<li><strong>几次 spawn</strong>：观察到 <strong>2 次</strong> <code>spawn</code>。分别对应创建 <code>ls.b</code> 进程和 <code>cat.b</code> 进程。</li>
+<li><strong>几次进程销毁</strong>：观察到 <strong>3 次</strong> 进程销毁。</li>
+</ul>
+<ol>
+<li><code>ls.b</code> 执行完后自我销毁。</li>
+<li><code>cat.b</code> 执行完后自我销毁。</li>
+<li>因为有管道符号 <code>|</code>，shell 本身会 <code>fork</code> 出一个<strong>子 shell</strong> 来解析和执行管道右侧的指令。当右侧指令完毕后，这个临时创建的子 shell 也会销毁。</li>
+</ol>
+<hr>
+<h2 id="二-难点分析">二. 难点分析</h2>
+<p>在 Lab6 中，最大的难点在于<strong>管道中的进程竞争问题</strong>以及 <strong>Shell 命令解析递归树的构建</strong>。</p>
+<ol>
+<li><strong>管道竞争机制的脑内推理（Mind Map 替代方案）</strong><br>
+对于 <code>_pipe_is_closed</code> 引起的数据竞争，初看非常反直觉。我们需要在脑海中建立一个“引用计数时间线”。</li>
+</ol>
+<ul>
+<li>难点突破点：理解 <code>syscall_</code> 的原子性与用户态库函数（非原子性）的区别。</li>
+<li>解决策略逻辑树：</li>
+<li><strong>目标</strong>：不触发错误的 <code>pageref(pipe) == pageref(fd)</code> 判定。</li>
+<li><strong>情况A (Close减少引用)</strong>：必须让 <code>fd</code> 跑在前面（更早变小），所以顺序是 <code>unmap(fd) -&gt; unmap(pipe)</code>。间隙状态：<code>pipe &gt; fd</code>（安全）。</li>
+<li><strong>情况B (Dup增加引用)</strong>：必须让 <code>pipe</code> 跑在前面（更早变大），所以顺序是 <code>map(pipe) -&gt; map(fd)</code>。间隙状态：<code>pipe &gt; fd</code>（安全）。</li>
+</ul>
+<ol start="2">
+<li><strong>Shell 命令解析 (<code>parsecmd</code>) 的执行流</strong><br>
+<code>parsecmd</code> 的递归与 <code>fork</code> 结合是另一个难点。</li>
+</ol>
+<ul>
+<li>当读取到命令 <code>A | B</code> 时：</li>
+</ul>
+<ol>
+<li>父 Shell 构建 <code>pipe</code>。</li>
+<li>父 Shell 执行 <code>fork()</code>。</li>
+<li><strong>父进程行为</strong>：重定向输出到写端 -&gt; <code>runcmd(A)</code> -&gt; <code>spawn(A)</code> -&gt; 等待子 Shell 结束。</li>
+<li><strong>子进程(子 Shell)行为</strong>：重定向输入到读端 -&gt; **递归调用 <code>parsecmd(B)**</code>（处理 B 之后可能还挂着重定向符号） -&gt; 最终 <code>runcmd(B)</code> -&gt; 销毁自身。<br>
+理清了这条从左到右、递归解析右子树的逻辑流程图，补全 <code>parsecmd</code> 的空缺代码便水到渠成了。</li>
+</ol>
+<hr>
+<h2 id="三-实验体会">三. 实验体会</h2>
+<p>相比于 Lab0 刚接触命令行时的手忙脚乱，到了 Lab6，我感觉自己在系统底层的俯视感越来越强了。</p>
+<p>这次实验把前几个 Lab 学到的知识完美地串联了起来：进程的 <code>fork</code> 与调度（Lab3）、共享内存机制的使用（Lab4）、文件系统的底层交互（Lab5），最终在 Lab6 汇聚成了一个肉眼可见、可交互的 Shell 和可以真正通信的管道。特别是用 <code>spawn</code> 读取硬盘上的 ELF 文件并分配内存的过程，让我彻底搞懂了从一行文本命令到可执行进程诞生中间到底发生了什么魔法。</p>
+<p>其中最让我痛苦但也最有收获的，莫过于分析管道的竞争条件。作为一个经常在用户态写代码的计科生，以前很少考虑到几行连续的 C 代码中竟然会穿插时钟中断，还会因为执行顺序的微调而导致程序死锁或崩溃。把 <code>map</code> 和 <code>unmap</code> 的顺序颠倒过来就能化解一次致命的进程竞争，这种精巧的设计令人拍案叫绝。这也为后续面对更复杂的操作系统并发和内存管理问题打下了一剂强心针。总体来说，虽然查 BUG 的过程“苦也苦也”，但看到 MOS 终端跑出绿色的 <code>pipe tests passed</code> 时，成就感无与伦比。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OS/" rel="tag"># OS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/09/OS_Lab5-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" rel="prev" title="OS_Lab5-实验报告">
+      <i class="fa fa-chevron-left"></i> OS_Lab5-实验报告
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">OS_Lab6_实验报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">一. 思考题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E9%9A%BE%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">二. 难点分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%AE%9E%E9%AA%8C%E4%BD%93%E4%BC%9A"><span class="nav-number">1.3.</span> <span class="nav-text">三. 实验体会</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HQ"
+      src="/images/labixiaoxin.jpg">
+  <p class="site-author-name" itemprop="name">HQ</p>
+  <div class="site-description" itemprop="description">985在读cs大二</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ARealChillGuy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ARealChillGuy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:635704176@qq.com" title="E-Mail → mailto:635704176@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/529225960?spm_id_from=333.1007.0.0" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;529225960?spm_id_from&#x3D;333.1007.0.0" rel="noopener" target="_blank"><i class="fa fa-tv fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+<!-- 今日诗词容器 (侧边栏·宋体增强版) -->
+<div class="daily-poem" style="
+    margin: 15px auto;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    /* 上下虚线颜色稍微深一点，更有质感 */
+    border-top: 1px dashed #999;
+    border-bottom: 1px dashed #999;
+    
+    /* 👇 核心修改：加了 !important 强制生效，防止被主题样式覆盖 */
+    font-family: 'Songti SC', 'SimSun', '宋体', serif !important;
+    
+    /* 👇 稍微加大字号，宋体太小了不好看 */
+    font-size: 18px; 
+    font-weight: bold;
+    
+    /* 👇 颜色用深灰，不刺眼但清晰 */
+    color: #333;
+    line-height: 1.6;
+">
+    <!-- 诗词显示区域 -->
+    <div id="poem_content" style="margin-bottom: 8px;">...</div>
+    
+    <!-- 诗词出处 -->
+    <div id="poem_info" style="font-size: 13px; color: #777; font-weight: normal; font-family: 'Songti SC', 'SimSun', '宋体', serif !important;"></div>
+
+    <!-- 核心脚本 -->
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      jinrishici.load(function(result) {
+        var sentence = result.data.content;
+        var info = result.data.origin.dynasty + ' · ' + result.data.origin.author;
+        
+        // 依然保持换行
+        var formattedSentence = sentence.replace(/，/g, '，<br>');
+        document.getElementById('poem_content').innerHTML = formattedSentence;
+        document.getElementById('poem_info').innerText = info;
+      });
+    </script>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2025-12 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HQ</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">25 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '6kWdgLVp5Kpt10BVZPpOwpFB-MdYXbMMI',
+      appKey     : '1YK1tAYZWZnNxGEkOtF19vtD',
+      placeholder: "欢迎留言交流...",
+      gravatarCDN: 'https://weavatar.com/avatar/',
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://6kwdglvp.api.lncldglobal.com'
+    });
+  }, window.Valine);
+});
+</script>
+<!-- 彩带背景特效 (Canvas-Ribbon) -->
+<script 
+    size="300" 
+    alpha="0.6" 
+    zIndex="-1" 
+    src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js">
+</script>
+
+<!-- 
+    参数说明：
+    size: 彩带的宽度（默认300），想细一点可以改小。
+    alpha: 透明度（0-1），0.6 是半透明，很舒服。
+    zIndex: -1 保证它在最底层，不挡文字。
+-->
+</body>
+</html>
