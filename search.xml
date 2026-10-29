@@ -51,8 +51,14 @@ git checkout HEAD – print.c</p>
 <p>体会与难点对应，对于Makefile的体会，我认为这种功能性的文件，尤其是为便利性服务的（其实也包括bash,shell）都是以练为主，多用自然就能熟悉，就像我的某位大佬室友，将笔记本装成了Linux系统，天天写命令行，这次Lab0不到一个小时就全部写完了，所以这次实验我感觉其实不涉及到什么灵感上的问题，不涉及到智商，主要是看课下作业的完成情况，自己完成课下，那么课上exam部分肯定没问题，对命令行再理解深刻一些，便能完成extra。</p>
 <p>还有一个惨痛的教训，<strong>指导书上的思考题一定要在第一遍看的时候就思考出答案</strong>，<strong>指导书上说读者课下自行查找的内容一定要去看</strong>，因为很可能extra就出这些内容，这一次就是awk指令，我没有自行学习，导致考试时无从下手，翻指导书也看不出来什么。哎！苦也苦也。</p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -150,8 +156,14 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <li>本次实验可以说是“写代码半小时，修 Bug 三整天”。由于错误的隐蔽性和发作的滞后性——也许是子进程返回寄存器少了一句修改，也许是页异常恢复的时候少弹出了四个字节，这些错误通常要在代码历经成千上万次 CPU 轮转后才会引发 panic 或断言失败。这段排错经历极大地提升了我对于利用 GDB 的异常向量追踪能力，也让我意识到了 C 语言指针和地址解引在底层系统开发中严格检查边界的极端重要性。整体来看，当跑通测试样例的一瞬间，所有繁复劳动都被巨大的获得感彻底覆盖，非常充实。</li>
 </ol>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>系统调用</tag>
       </tags>
   </entry>
   <entry>
@@ -186,8 +198,14 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <p>p_paddr:物理内存地址 p_filesz:文件大小，这个段在文件里占据了多少字节 p_memsz:内存大小，这个段在内存里需要占据多少字节</p>
 <p>p_flags:段的访问权限 p_align:内存页对齐要求，<strong>规定这个段在内存中的起始地址</strong> <strong>p_vaddr</strong> <strong>和文件里的</strong> <strong>p_offset</strong> <strong>必须对齐到一个页面大小的整数倍（通常是 0x1000，即 4096 字节）。这方便操作系统利用内存页机制进行映射。</strong></p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>ELF</tag>
       </tags>
   </entry>
   <entry>
@@ -289,8 +307,14 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <p>这次实验把前几个 Lab 学到的知识完美地串联了起来：进程的 <code>fork</code> 与调度（Lab3）、共享内存机制的使用（Lab4）、文件系统的底层交互（Lab5），最终在 Lab6 汇聚成了一个肉眼可见、可交互的 Shell 和可以真正通信的管道。特别是用 <code>spawn</code> 读取硬盘上的 ELF 文件并分配内存的过程，让我彻底搞懂了从一行文本命令到可执行进程诞生中间到底发生了什么魔法。</p>
 <p>其中最让我痛苦但也最有收获的，莫过于分析管道的竞争条件。作为一个经常在用户态写代码的计科生，以前很少考虑到几行连续的 C 代码中竟然会穿插时钟中断，还会因为执行顺序的微调而导致程序死锁或崩溃。把 <code>map</code> 和 <code>unmap</code> 的顺序颠倒过来就能化解一次致命的进程竞争，这种精巧的设计令人拍案叫绝。这也为后续面对更复杂的操作系统并发和内存管理问题打下了一剂强心针。总体来说，虽然查 BUG 的过程“苦也苦也”，但看到 MOS 终端跑出绿色的 <code>pipe tests passed</code> 时，成就感无与伦比。</p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>Shell</tag>
       </tags>
   </entry>
   <entry>
@@ -301,10 +325,11 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <p>上次下雪还是去年差不多这个时候，那时候还在大运村住，只有晚上下了一会儿。作为南方人，见到雪的契机其实还挺多，不过每次看到雪都会很开心很惊喜，因为离过年又近了。当然对于大学生来说，也离期末周更近了。</p>
 ]]></content>
       <categories>
-        <category>随笔</category>
+        <category>生活随笔</category>
       </categories>
       <tags>
         <tag>雪</tag>
+        <tag>校园生活</tag>
       </tags>
   </entry>
   <entry>
@@ -386,8 +411,14 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <h2 id="实验体会">实验体会</h2>
 <p>这次实验相比于lab1来说是难度飙升，exercise的数量和thinking的数量比以前也多，这次lab难点困扰了我很久，一开始没分清页表项个数和所占物理内存大小的区别，不了解二级页表的结构，感觉到非常困惑，随着实验的进行，我在网上查询资料以及翻阅os指导书以后，终于对内存分配有了更深层次的理解，这也为我以后学习os打下了一个非常牢固的基础！</p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>内存管理</tag>
       </tags>
   </entry>
   <entry>
@@ -478,8 +509,14 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <p>“权限隔离”与微内核的优雅<br>
 当整个 Lab 跑通，在模拟器终端敲出字符的一瞬间，最让我震撼的是：所有这些操作磁盘块的复杂逻辑，统统是运行在一个无特权的用户态进程中的。内核没有几万行的庞大文件系统驱动，只负责提供一个可以读写特殊内存地址的 sys_read_dev 接口。这让曾经在课堂上学到的“微内核鲁棒性”变得真实可触——文件系统挂了，重启一下服务进程就好，整个操作系统的核心依然安然无恙。</p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>文件系统</tag>
       </tags>
   </entry>
   <entry>
@@ -489,8 +526,13 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <p>1.18号到家，到今天两天时间，回到家的第一感受就是感觉自己变懒了，两个小时的车程在北京其实还好，但是在家就感觉很长很长。</p>
 <p>今天又给我的木吉他换了一套弦，不得不说那套弦有些许反人类，花了好大功夫才装上，接下来寒假我的目标吧，就是学会一首歌，这个一定要定好，不然没有目的的学就会导致很长时间琴技都没有进步，等这两天闲下来就开始学习！不能忘记还要学习一下java！</p>
 ]]></content>
+      <categories>
+        <category>生活随笔</category>
+      </categories>
       <tags>
         <tag>随笔</tag>
+        <tag>寒假</tag>
+        <tag>吉他</tag>
       </tags>
   </entry>
   <entry>
@@ -550,8 +592,14 @@ MOS 操作系统使用了“自映射页目录”机制，通过在初始化时�
 <p>这次 Lab 3 的实验相比于 Lab 2，代码量虽然不多，但逻辑深度有了质的飞跃。一开始面对各种繁杂的汇编宏（如 <code>SAVE_ALL</code>、<code>RESTORE_ALL</code>）和进程状态的转换感到十分困惑。尤其是“伪造现场”将 ELF 入口地址强行塞入 <code>cp0_epc</code>，再利用 <code>eret</code> 巧妙启动进程的设计，让我拍案叫绝。</p>
 <p>通过在纸上画图推演 <code>TAILQ</code> 双向队列在 <code>schedule</code> 时间片轮转中的变化，并在网上查阅 MIPS 架构 CP0 寄存器的手册，我终于打通了硬件中断触发到软件系统调度的任督二脉。看到终端里两个死循环进程在时钟中断的驱动下完美交替运行，极大地满足了我的成就感！这也为我后续理解 Lab 4 的 IPC 和 <code>fork</code> 写时复制机制打下了坚实的基础。</p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
       <tags>
         <tag>OS</tag>
+        <tag>实验报告</tag>
+        <tag>进程管理</tag>
       </tags>
   </entry>
   <entry>
@@ -900,10 +948,12 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <h2 id="近代物理基础">近代物理基础</h2>
 ]]></content>
       <categories>
-        <category>大二上期末复习</category>
+        <category>学习笔记</category>
+        <category>大学物理</category>
       </categories>
       <tags>
         <tag>物理</tag>
+        <tag>期末复习</tag>
       </tags>
   </entry>
   <entry>
@@ -919,10 +969,11 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <p>如果有人能看到这里，欢迎你，你多了一位新的赛博朋友！</p>
 ]]></content>
       <categories>
-        <category>随笔</category>
+        <category>生活随笔</category>
       </categories>
       <tags>
         <tag>记录</tag>
+        <tag>博客搭建</tag>
       </tags>
   </entry>
   <entry>
@@ -931,8 +982,12 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
     <content><![CDATA[<h3 id="醉里且贪欢笑，要愁那得工夫。近来始觉古人书，信著全无是处。">醉里且贪欢笑，要愁那得工夫。近来始觉古人书，信著全无是处。</h3>
 <h3 id="昨夜松边醉倒，问松我醉何如。只疑松动要来扶，以手推松曰“去！”">昨夜松边醉倒，问松我醉何如。只疑松动要来扶，以手推松曰“去！”</h3>
 ]]></content>
+      <categories>
+        <category>诗词摘录</category>
+      </categories>
       <tags>
         <tag>摘抄</tag>
+        <tag>诗词</tag>
       </tags>
   </entry>
   <entry>
@@ -943,7 +998,8 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <h2 id="章节">章节</h2>
 ]]></content>
       <categories>
-        <category>大二上期末复习</category>
+        <category>学习笔记</category>
+        <category>计算机组成</category>
       </categories>
       <tags>
         <tag>计组</tag>
@@ -1626,8 +1682,14 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <h2 id="七-未来方向">七.未来方向</h2>
 <p>第一单元我认为还能将战线再拉长点，感觉可以再增加一次迭代作业，但是内容不要增加太多，让每一次迭代之间需要迭代的内容稍微少一点，少量高质，也更能让新学习OO的同学更快的适应。</p>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>面向对象</category>
+      </categories>
       <tags>
         <tag>OO</tag>
+        <tag>Java</tag>
+        <tag>表达式解析</tag>
       </tags>
   </entry>
 </search>

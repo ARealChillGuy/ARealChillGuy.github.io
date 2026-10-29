@@ -19,7 +19,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"lilyellow.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"lilyellow.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="985在读cs大二">
@@ -44,6 +44,8 @@
     lang   : 'zh-CN'
   };
 </script>
+<link rel="stylesheet" href="/css/lilye-journal.css?v=20261029b">
+<meta name="color-scheme" content="light">
 
   <title>归档 | LilYe</title>
   
@@ -79,7 +81,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -311,13 +313,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -335,47 +337,9 @@
   </div>
 
 
-<!-- 今日诗词容器 (侧边栏·宋体增强版) -->
-<div class="daily-poem" style="
-    margin: 15px auto;
-    padding: 15px 0;
-    width: 100%;
-    text-align: center;
-    /* 上下虚线颜色稍微深一点，更有质感 */
-    border-top: 1px dashed #999;
-    border-bottom: 1px dashed #999;
-    
-    /* 👇 核心修改：加了 !important 强制生效，防止被主题样式覆盖 */
-    font-family: 'Songti SC', 'SimSun', '宋体', serif !important;
-    
-    /* 👇 稍微加大字号，宋体太小了不好看 */
-    font-size: 18px; 
-    font-weight: bold;
-    
-    /* 👇 颜色用深灰，不刺眼但清晰 */
-    color: #333;
-    line-height: 1.6;
-">
-    <!-- 诗词显示区域 -->
-    <div id="poem_content" style="margin-bottom: 8px;">...</div>
-    
-    <!-- 诗词出处 -->
-    <div id="poem_info" style="font-size: 13px; color: #777; font-weight: normal; font-family: 'Songti SC', 'SimSun', '宋体', serif !important;"></div>
+<div class="journal-sidebar-note"><span class="journal-eyebrow">✿ 今日份诗意</span><p id="poem_content">且将新火试新茶，<br>诗酒趁年华。</p><small id="poem_info">宋 · 苏轼</small></div><div class="sidebar-signoff">慢慢来，也是一种前进。 ♡</div>
+<script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8" async onload="if(window.jinrishici){jinrishici.load(function(result){if(result&amp;&amp;result.data){document.getElementById('poem_content').textContent=result.data.content;document.getElementById('poem_info').textContent=result.data.origin.dynasty+' · '+result.data.origin.author;}})}"></script>
 
-    <!-- 核心脚本 -->
-    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-    <script type="text/javascript">
-      jinrishici.load(function(result) {
-        var sentence = result.data.content;
-        var info = result.data.origin.dynasty + ' · ' + result.data.origin.author;
-        
-        // 依然保持换行
-        var formattedSentence = sentence.replace(/，/g, '，<br>');
-        document.getElementById('poem_content').innerHTML = formattedSentence;
-        document.getElementById('poem_info').innerText = info;
-      });
-    </script>
-</div>
       </div>
 
     </div>
@@ -449,12 +413,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>
@@ -523,19 +483,7 @@ NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
   }, window.Valine);
 });
 </script>
-<!-- 彩带背景特效 (Canvas-Ribbon) -->
-<script 
-    size="300" 
-    alpha="0.6" 
-    zIndex="-1" 
-    src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js">
-</script>
+<!-- LilYe journal: lightweight paper texture and original personal images. -->
 
-<!-- 
-    参数说明：
-    size: 彩带的宽度（默认300），想细一点可以改小。
-    alpha: 透明度（0-1），0.6 是半透明，很舒服。
-    zIndex: -1 保证它在最底层，不挡文字。
--->
 </body>
 </html>
