@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"arealchillguy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"lilyellow.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="OS-Lab2-实验报告 思考题 Thinking 2.1 1.虚拟地址 2.虚拟地址 Thinking 2.2 一. 用宏实现提高了数据结构的多态性，通常如果我们不用宏，就需要定义一个包含 void *data 的通用链表节点，然后在存取数据时进行繁琐且不安全的强制类型转换；或者为 Student、Process、File 每种不同的数据类型都手写一遍对应的链表增删改查函数。 宏在预处理阶段直接">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OS_Lab2_实验报告">
-<meta property="og:url" content="http://arealchillguy.github.io/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:url" content="https://lilyellow.site/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/index.html">
 <meta property="og:site_name" content="LilYe">
 <meta property="og:description" content="OS-Lab2-实验报告 思考题 Thinking 2.1 1.虚拟地址 2.虚拟地址 Thinking 2.2 一. 用宏实现提高了数据结构的多态性，通常如果我们不用宏，就需要定义一个包含 void *data 的通用链表节点，然后在存取数据时进行繁琐且不安全的强制类型转换；或者为 Student、Process、File 每种不同的数据类型都手写一遍对应的链表增删改查函数。 宏在预处理阶段直接">
 <meta property="og:locale" content="zh_CN">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="OS">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://arealchillguy.github.io/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+<link rel="canonical" href="https://lilyellow.site/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
 
 
 <script id="page-configurations">
@@ -142,6 +142,11 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+        <li class="menu-item menu-item-雅思学习">
+
+    <a href="/ielts/" rel="section"><i class="fa fa-book fa-fw"></i>雅思学习</a>
+
+  </li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -197,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://arealchillguy.github.io/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+    <link itemprop="mainEntityOfPage" href="https://lilyellow.site/2026/06/09/OS_Lab2-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/labixiaoxin.jpg">
@@ -446,7 +451,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -459,7 +464,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -546,12 +551,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">27k</span>
+    <span title="站点总字数">33k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">25 分钟</span>
+    <span title="站点阅读时长">30 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
